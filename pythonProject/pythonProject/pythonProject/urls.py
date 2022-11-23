@@ -16,12 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from interface.views import interfaceAPIView
+# from interface.views import interfaceAPIView
 from interface.views import index
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
-    path('api/v1/fileslist', interfaceAPIView.as_view())
+    # path('api/v1/fileslist', interfaceAPIView.as_view())
 ]
