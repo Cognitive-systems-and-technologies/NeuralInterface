@@ -1,0 +1,167 @@
+ {% extends 'interface/base.html' %}
+  {% block content %}
+    <span class="fs-4 fw-bold">Управление агентами</span>
+        <hr>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Имя агента</th>
+              <th scope="col">Статус агента</th>
+              <th scope="col">Группа агента</th>
+              <th scope="col">Тип агента</th>
+              <th scope="col">Дата создания</th>
+              <th scope="col">Дата изменения</th>
+              <th scope="col">
+                  <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Добавить запись</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+             {% for a in agents %}
+              <tr>
+                 <td>{{ a.id }}</td>
+                 <td>{{ a.agent_name }}</td>
+                 <td>{{ a.agent_status }}</td>
+                 <td>{{ a.agent_group_id }}</td>
+                 <td>{{ a.agent_type_id }}</td>
+                 <td>{{ a.datetime_create }}</td>
+                 <td>{{ a.datetime_change }}</td>
+                  <td>
+                      <button type="button" class="btn btn-outline-info btn-sm">
+                          <svg width="16" height="16" fill="currentColor" class="bi bi-info" viewBox="0 0 16 16">
+                              <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                          </svg>
+                      </button>
+                      <button type="button" class="btn btn-outline-primary btn-sm">
+                          <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                          </svg>
+                      </button>
+                      <button type="button" class="btn btn-outline-danger btn-sm">
+                          <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                              <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                            </svg>
+                      </button>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+        <span class="fs-4 fw-bold">Управление группами</span>
+        <hr>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Имя группы</th>
+              <th scope="col">Приоритет группы</th>
+              <th scope="col">Дата создания</th>
+              <th scope="col">Дата изменения</th>
+              <th scope="col">
+                  <button type="button" class="btn btn-outline-success btn-sm" onclick="selectGroupAgent()">Добавить запись</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+             {% for ag in agentGroups %}
+              <tr>
+                 <td>{{ ag.id }}</td>
+                 <td>{{ ag.agent_group_name }}</td>
+                 <td>{{ ag.agent_group_priority }}</td>
+                 <td>{{ ag.datetime_create }}</td>
+                 <td>{{ ag.datetime_change }}</td>
+                  <td>
+                      <button type="button" class="btn btn-outline-primary btn-sm">
+                          <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                          </svg>
+                      </button>
+                      <button type="button" class="btn btn-outline-danger btn-sm">
+                          <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                              <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                            </svg>
+                      </button>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="p-3 col-2">
+        <span class="fs-4 fw-bold">Информация</span>
+        <hr>
+          <ul class="list-group">
+              <li class="list-group-item active" aria-current="true">Информация о агенте</li>
+              <li class="list-group-item">Тест</li>
+              <li class="list-group-item">Тест</li>
+              <li class="list-group-item">Тест</li>
+              <li class="list-group-item">Тест</li>
+              <li class="list-group-item">Тест</li>
+              <li class="list-group-item">Тест</li>
+            </ul>
+      </div>
+  {% endblock %}
+
+ {% block modals %}
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Заголовок модального окна</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label class="form-label">Имя агента</label>
+                <input type="email" class="form-control" id="exampleInputEmail1">
+                <div id="emailHelp" class="form-text">Имя агента должно быть уникальным.</div>
+              </div>
+              <div class="d-flex justify-content-start">
+                  <div class="col-6">
+                  <label class="form-label">Имя группы</label>
+                  <form>
+                      <select class="form-select" aria-label="Default select example">
+                          {% for a in agentGroups %}
+                          <option value="{{ a.id }}" selected>{{ a.agent_group_name }}</option>
+                          {% endfor %}
+                      </select>
+                  </form>
+                  </div>
+                  <div class="col-6">
+                  <label class="form-label">Тип агента</label>
+                  <form class="mb-3 px-1">
+                      <select class="form-select" aria-label="Default select example">
+                          {% for a in agentTypes %}
+                          <option value="{{ a.id }}" selected>{{ a.agent_type }}</option>
+                          {% endfor %}
+                      </select>
+                  </form>
+                  </div>
+                </div>
+              <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Агент активен</label>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            <button type="button" class="btn btn-primary">Сохранить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+
+   {% block scripts %}
+   {% load static %}
+     <script src="{% static 'js/index.js' %}"></script>
+    {% endblock %}
+
+

@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from interface.views import interfaceAPIView
+# from interface.views import interfaceAPIView
+from interface.views import index, monitor
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/fileslist', interfaceAPIView.as_view())
+    path('', index),
+    path('monitor/', monitor),
+    # path('api/v1/fileslist', interfaceAPIView.as_view())
 ]
