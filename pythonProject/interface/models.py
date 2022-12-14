@@ -22,6 +22,7 @@ class AgentGroups(models.Model):
 
 
 class Agents(models.Model):
+    agent_port = models.IntegerField()
     agent_name = models.CharField(max_length=100)
     agent_status = models.IntegerField()
     datetime_create = models.DateTimeField(auto_now_add=True)
@@ -37,7 +38,7 @@ class AgentCoordinates(models.Model):
     coordinate_x = models.IntegerField()
     coordinate_y = models.IntegerField()
     datetime_create = models.DateTimeField(auto_now_add=True)
-    agent_id = models.ForeignKey(Agents, on_delete=models.CASCADE)
+    agent_port = models.ForeignKey(Agents, on_delete=models.CASCADE)
 
     def __int__(self):
         return self.coordinate_y

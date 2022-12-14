@@ -4,7 +4,26 @@
         <hr>
  <div id="chart">
  </div>
-
+ <table class="table table-hover" style="display: none;">
+          <thead>
+            <tr>
+              <th scope="col">Порт</th>
+              <th scope="col">Координата X</th>
+              <th scope="col">Координата Y</th>
+              <th scope="col">Дата изменения</th>
+            </tr>
+          </thead>
+          <tbody>
+             {% for ag in agentCoordinates %}
+              <tr>
+                 <td>{{ ag.agent_port_id }}</td>
+                 <td>{{ ag.coordinate_x }}</td>
+                 <td>{{ ag.coordinate_y }}</td>
+                 <td>{{ ag.datetime_create }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+        </table>
   {% endblock %}
 
    {% block scripts %}
