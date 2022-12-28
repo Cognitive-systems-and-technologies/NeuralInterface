@@ -1,8 +1,10 @@
+# Сериализатор. Обработка данных перед отправкой пользователю
 from rest_framework import serializers
-from .models import Files
+from .models import Agents, AgentGroups, AgentTypes, AgentErrors
 
 
-class FilesSerializer(serializers.ModelSerializer):
+# Сериализатор для получения информации, отображаемой графиком
+class GraphSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Files
-        fields = ('name', 'path_file')
+        model = AgentErrors
+        fields = ('id', 'agent_step', 'agent_error_value', 'agent_port')

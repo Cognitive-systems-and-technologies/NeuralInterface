@@ -1,4 +1,4 @@
-
+/* Основная страница */
 function selectGroupAgent() {
     var items = document.querySelectorAll("#modalChangeGroupAgentList li");
 

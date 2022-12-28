@@ -1,3 +1,4 @@
+# Регистрация приложений
 from django.apps import AppConfig
 
 

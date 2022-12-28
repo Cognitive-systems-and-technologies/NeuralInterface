@@ -1,9 +1,9 @@
+# Модель. Описание таблиц БД
 from django.db import models
-
-# Create your models here.
 from django.db.models.fields import related
 
 
+# Описание таблицы типов агентов
 class AgentTypes(models.Model):
     agent_type = models.CharField(max_length=100)
 
@@ -11,6 +11,7 @@ class AgentTypes(models.Model):
         return self.agent_type
 
 
+# Описание таблицы групп агентов
 class AgentGroups(models.Model):
     agent_group_name = models.CharField(max_length=100)
     agent_group_priority = models.IntegerField()
@@ -21,6 +22,7 @@ class AgentGroups(models.Model):
         return self.agent_group_name
 
 
+# Описание таблицы данных агентов
 class Agents(models.Model):
     agent_port = models.IntegerField()
     agent_name = models.CharField(max_length=100)
@@ -34,40 +36,13 @@ class Agents(models.Model):
         return self.agent_name
 
 
-class AgentCoordinates(models.Model):
-    coordinate_x = models.IntegerField()
-    coordinate_y = models.IntegerField()
+# Описание таблицы ошибок агентов
+class AgentErrors(models.Model):
+    agent_step = models.IntegerField()
+    agent_error_value = models.FloatField()
     datetime_create = models.DateTimeField(auto_now_add=True)
     agent_port = models.ForeignKey(Agents, on_delete=models.CASCADE)
 
     def __int__(self):
-        return self.coordinate_y
+        return self.agent_error_value
 
-
-# class Test(models.Model):
-#     name = models.CharField(max_length=100)
-#     path_file = models.TextField(max_length=300, blank=True)
-#     time_create = models.DateTimeField(auto_now_add=True)
-#
-#     def __str__(self):
-#         return self.name
-
-
-# class Files(models.Model):
-#     id_file = models.IntegerField()
-#     name = models.CharField(max_length=100)
-#     path_file = models.TextField(max_length=300, blank=True)
-#     time_create = models.DateTimeField(auto_now_add=True)
-#     id_file_foreign = models.ForeignKey('FilesLogs', on_delete=models.PROTECT, null=True)
-#
-#     def __str__(self):
-#         return self.name
-#
-#
-# class FilesLogs(models.Model):
-#     id_file = models.IntegerField()
-#     time_update = models.DateTimeField(auto_now=True)
-#     check_status = models.BooleanField()
-#
-#     def __int__(self):
-#         return self.id_file

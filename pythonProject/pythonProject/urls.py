@@ -17,11 +17,11 @@ from django.contrib import admin
 from django.urls import path
 
 # from interface.views import interfaceAPIView
-from interface.views import index, monitor
+from interface.views import index, monitor, graphApiData
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
     path('monitor/', monitor),
-    # path('api/v1/fileslist', interfaceAPIView.as_view())
+    path('api/graphData', graphApiData.as_view())
 ]
