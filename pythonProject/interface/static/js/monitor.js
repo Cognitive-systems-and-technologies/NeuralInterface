@@ -30,7 +30,10 @@ var options = {
     series: [{
           name: 'Агент 1',
           data: updatedJson
-        }],
+        }, {
+          name: 'Агент 2',
+          data: updatedJson
+         }],
     xaxis: {
       type: 'number'
     }

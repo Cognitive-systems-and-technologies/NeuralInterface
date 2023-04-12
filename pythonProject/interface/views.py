@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from django.http import HttpResponse
 from django.template import loader
-from .models import Agents, AgentGroups, AgentTypes, AgentErrors
+from .models import AgentsView, AgentGroups, AgentTypes, AgentErrorsView, AgentFilesView
 from .serializers import GraphSerializer
 from django.views.generic import ListView
 
@@ -12,22 +12,23 @@ from django.views.generic import ListView
 # Формирование шаблона и данных для серверного рендеринга базовой страницы
 def index(request):
     template = loader.get_template('interface/index.html')
-    agents = Agents.objects.all()
+    agents = AgentsView.objects.all()
     agentGroups = AgentGroups.objects.all()
     agentTypes = AgentTypes.objects.all()
-    agentCoordinates = AgentErrors.objects.all()
+    AgentFiles = AgentFilesView.objects.all()
+    agentCoordinates = AgentErrorsView.objects.all()
     array = {'agents': agents, 'agentGroups': agentGroups, 'agentTypes': agentTypes,
-             'agentCoordinates': agentCoordinates}
+             'agentCoordinates': agentCoordinates, 'agentFiles': AgentFiles}
     return HttpResponse(template.render(array, request))
 
 
 # Формирование шаблона и данных для серверного рендеринга страницы с графиком
 def monitor(request):
     template = loader.get_template('interface/monitor.html')
-    agents = Agents.objects.all()
+    agents = AgentsView.objects.all()
     agentGroups = AgentGroups.objects.all()
     agentTypes = AgentTypes.objects.all()
-    agentErrors = AgentErrors.objects.all()
+    agentErrors = AgentErrorsView.objects.all()
     array = {'agents': agents, 'agentGroups': agentGroups, 'agentTypes': agentTypes,
              'agentErrors': agentErrors}
     return HttpResponse(template.render(array, request))
@@ -35,6 +36,6 @@ def monitor(request):
 
 # Django REST API. Данные для графика на странице
 class graphApiData(generics.ListAPIView):
-    queryset = AgentErrors.objects.all()
+    queryset = AgentErrorsView.objects.all()
     serializer_class = GraphSerializer
 
