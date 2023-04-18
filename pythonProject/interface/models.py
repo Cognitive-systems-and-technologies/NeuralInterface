@@ -31,15 +31,14 @@ class AgentTypes(models.Model):
 
 
 class Agents(models.Model):
-    # id = models.OneToOneField(AgentFiles, models.DO_NOTHING, db_column='id', primary_key=True, blank=True)
     agent_name = models.CharField(max_length=250, blank=True, null=True)
     agent_group = models.ForeignKey(AgentGroups, models.DO_NOTHING, blank=True, null=True)
     agent_status = models.IntegerField(blank=True, null=True)
-    agent_description = models.CharField(max_length=250, blank=True, null=True)
+    agent_description = models.CharField(max_length=500, blank=True, null=True)
     datetime_create = models.DateTimeField(blank=True, null=True)
     datetime_change = models.DateTimeField(blank=True, null=True)
     agent_type = models.ForeignKey(AgentTypes, models.DO_NOTHING, blank=True, null=True)
-    agent_port = models.IntegerField(blank=True, null=True)
+    agent_mac_address = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -63,6 +62,7 @@ class AgentErrors(models.Model):
     agent_step = models.IntegerField(blank=True, null=True)
     agent_error_value = models.FloatField(blank=True, null=True)
     datetime_create = models.DateTimeField(blank=True, null=True)
+    agent_error_info = models.CharField(max_length=250, blank=True, null=True)
     agent_id = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
@@ -80,7 +80,7 @@ class AgentsView(models.Model):
     datetime_create = models.DateTimeField(blank=True, null=True)
     datetime_change = models.DateTimeField(blank=True, null=True)
     agent_type = models.CharField(max_length=100)
-    agent_port = models.IntegerField(blank=True, null=True)
+    agent_mac_address = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -92,7 +92,9 @@ class AgentErrorsView(models.Model):
     agent_step = models.IntegerField(blank=True, null=True)
     agent_error_value = models.FloatField(blank=True, null=True)
     datetime_create = models.DateTimeField(blank=True, null=True)
+    agent_error_info = models.CharField(max_length=250, blank=True, null=True)
     agent_name = models.CharField(max_length=250, blank=True, null=True)
+    agent_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -111,6 +113,30 @@ class AgentFilesView(models.Model):
     class Meta:
         managed = False
         db_table = 'v_agent_files'
+
+
+class AgentGroupsView(models.Model):
+    agent_group_name = models.CharField(max_length=100)
+    agent_group_priority = models.IntegerField()
+    datetime_create = models.DateTimeField()
+    datetime_change = models.DateTimeField()
+    agent_group_description = models.CharField(max_length=250, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'v_agent_groups'
+
+
+class AgentTypesView(models.Model):
+    agent_type = models.CharField(max_length=100)
+    agent_type_description = models.CharField(max_length=250, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'v_agent_types'
+
+
+
 
 
 

@@ -4,14 +4,15 @@
   {% block content %}
     <span class="fs-4 fw-bold">Мониторинг</span>
         <hr>
- <div id="chart">
- </div>
+    <div id="chart" style="width: 1500px; height: 600px;"></div>
+
   {% endblock %}
 
    {% block scripts %}
    {% load static %}
      <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
      <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
      <script src="{% static 'js/monitor.js' %}"></script>
 
     {% endblock %}
