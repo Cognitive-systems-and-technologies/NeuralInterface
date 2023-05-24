@@ -56,12 +56,14 @@ function graphDraw() {
         .then(data => {
             agentStep = Object.values(data).map(item => parseInt(item['agent_step']));
             agentError = Object.values(data).map(item => parseInt(item['agent_error_value']));
+            agentName = data[0].agent_name
             // Устанавливаем опции графика и загружаем данные
             chart.setOption({
                 xAxis: {
                     data: agentStep
                 },
                 series: [{
+                    name: agentName,
                     data: agentError
                 }]
             });

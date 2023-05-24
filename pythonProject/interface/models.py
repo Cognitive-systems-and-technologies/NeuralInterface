@@ -58,6 +58,17 @@ class AgentFiles(models.Model):
         db_table = 't_agent_files'
 
 
+class AgentNeuralNetworkState(models.Model):
+    agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
+    neural_network_state = models.CharField(max_length=1000000, blank=True, null=True)
+    file_description = models.CharField(max_length=250, blank=True, null=True)
+    create_datetime = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 't_agent_neural_network_state'
+
+
 class AgentErrors(models.Model):
     agent_step = models.IntegerField(blank=True, null=True)
     agent_error_value = models.FloatField(blank=True, null=True)
