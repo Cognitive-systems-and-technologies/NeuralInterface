@@ -1,20 +1,64 @@
-<!-- Страница графика -->
-
 {% extends 'interface/base.html' %}
-  {% block content %}
-    <span class="fs-4 fw-bold">Мониторинг</span>
-        <hr>
-    <div id="chart" style="width: 1500px; height: 600px;"></div>
 
-  {% endblock %}
+{% block content %}
+<span class="fs-4 fw-bold">Мониторинг</span>
+<hr>
 
-   {% block scripts %}
-   {% load static %}
-     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-     <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
-     <script src="{% static 'js/monitor.js' %}"></script>
+<div class="col-sm-12" id="chart" style="height: 500px;"></div>
+<table class="table table-hover col-12 table-sm">
+    <thead>
+    <tr>
+        <th class="text-center" scope="col">Статус</th>
+        <th class="text-center" scope="col">Название</th>
+        <th class="text-center" scope="col">Группа</th>
+        <th class="text-center" scope="col">Тип</th>
+        <th class="text-center" scope="col">MAC адрес</th>
+        <th class="text-center" scope="col">IP адрес и порт</th>
+        <th class="text-center" scope="col">Дата изменения</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for a in agents %}
+    <tr class="clickable-row">
+        <td style="display: none">{{ a.id }}</td>
+        <td>{% if a.agent_status == "Активен" %}
+            <svg class="text-success" width="30" height="30" fill="currentColor"
+                 viewBox="0 0 16 16">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+            </svg>
+            {% else %}
+            <svg class="text-danger" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                <path fill-rule="evenodd"
+                      d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+            </svg>
+            {% endif %}
+        </td>
+        <td class="text-center">{{ a.agent_name|default:"" }}</td>
+        <td class="text-center">{{ a.agent_group_name|default:"" }}</td>
+        <td class="text-center">{{ a.agent_type|default:"" }}</td>
+        <td class="text-center">{{ a.agent_mac_address|default:"" }}</td>
+        <td class="text-center">{{ a.agent_ip_address_port|default:"" }}</td>
+        <td style="display: none">{{ a.datetime_create|default:"" }}</td>
+        <td class="text-center">{{ a.datetime_change|default:"" }}</td>
+        <td style="display: none">{{ a.agent_description }}</td>
+        <td style="display: none">{{ a.agent_ip_address }}</td>
+        <td style="display: none">{{ a.agent_port }}</td>
+        <td style="display: none">{{ a.agent_group_id }}</td>
+        <td style="display: none">{{ a.agent_type_id }}</td>
+        <td style="display: none">{{ a.agent_status_id }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 
-    {% endblock %}
+{% endblock %}
 
-
+{% block scripts %}
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+<script src="{% static 'js/monitor.js' %}"></script>
+{% endblock %}

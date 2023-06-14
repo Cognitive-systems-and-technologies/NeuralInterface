@@ -2,20 +2,22 @@
 {% extends 'interface/base.html' %}
 {% block content %}
 <span class="fs-4 fw-bold">Управление агентами</span>
-<hr>
-<table class="table table-hover">
+
+<button class="btn btn-primary" onclick="sendRequestDjango()" style="display: none">Тест http request из Django</button>
+<table class="table table-hover col-12 table-sm">
     <thead>
     <tr>
-        <th scope="col">#</th>
-        <th scope="col">Имя агента</th>
-        <th scope="col">Статус агента</th>
-        <th scope="col">Группа агента</th>
-        <th scope="col">Тип агента</th>
-        <th scope="col">Порт агента</th>
-        <th scope="col">Дата изменения</th>
+        <th class="text-center" scope="col">Статус</th>
+        <th class="text-center" scope="col">Название</th>
+        <th class="text-center" scope="col">Группа</th>
+        <th class="text-center" scope="col">Тип</th>
+        <th class="text-center" scope="col">MAC адрес</th>
+        <th class="text-center" scope="col">IP адрес и порт</th>
+        <th class="text-center" scope="col">Дата создания</th>
+        <th class="text-center" scope="col">Дата изменения</th>
         <th scope="col">
             <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop">Добавить запись
+                    data-bs-target="#modalAddAgent">Добавить запись
             </button>
         </th>
     </tr>
@@ -23,27 +25,45 @@
     <tbody>
     {% for a in agents %}
     <tr>
-        <td>{{ a.id }}</td>
-        <td>{{ a.agent_name }}</td>
-        <td>{{ a.agent_status }}</td>
-        <td>{{ a.agent_group_name }}</td>
-        <td>{{ a.agent_type }}</td>
-        <td>{{ a.agent_mac_address }}</td>
-        <td>{{ a.datetime_create }}</td>
+        <td style="display: none">{{ a.id }}</td>
+        <td>{% if a.agent_status == "Активен" %}
+            <svg class="text-success" width="30" height="30" fill="currentColor"
+                 viewBox="0 0 16 16">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+            </svg>
+            {% else %}
+            <svg class="text-danger" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                      d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                <path fill-rule="evenodd"
+                      d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+            </svg>
+            {% endif %}
+        </td>
+        <td class="text-center">{{ a.agent_name|default:"" }}</td>
+        <td class="text-center">{{ a.agent_group_name|default:"" }}</td>
+        <td class="text-center">{{ a.agent_type|default:"" }}</td>
+        <td class="text-center">{{ a.agent_mac_address|default:"" }}</td>
+        <td class="text-center">{{ a.agent_ip_address_port|default:"" }}</td>
+        <td class="text-center">{{ a.datetime_create|default:"" }}</td>
+        <td class="text-center">{{ a.datetime_change|default:"" }}</td>
+        <td style="display: none">{{ a.agent_description }}</td>
+        <td style="display: none">{{ a.agent_ip_address }}</td>
+        <td style="display: none">{{ a.agent_port }}</td>
+        <td style="display: none">{{ a.agent_group_id }}</td>
+        <td style="display: none">{{ a.agent_type_id }}</td>
+        <td style="display: none">{{ a.agent_status_id }}</td>
         <td>
-            <button type="button" class="btn btn-outline-info btn-sm">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-info" viewBox="0 0 16 16">
-                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                </svg>
-            </button>
-            <button type="button" class="btn btn-outline-primary btn-sm">
+            <button type="button" id="editAgent" class="editAgent btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#modalEditAgent" value="{{ a.id }}">
                 <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                     <path fill-rule="evenodd"
                           d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                 </svg>
             </button>
-            <button type="button" class="btn btn-outline-danger btn-sm">
+            <button type="button" id="deleteAgent" class="deleteAgent btn btn-outline-danger btn-sm"
+                    data-id="{{ a.id }}">
                 <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
                           d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
@@ -56,149 +76,167 @@
     {% endfor %}
     </tbody>
 </table>
-<span class="fs-4 fw-bold">Управление группами</span>
-<hr>
-<table class="table table-hover">
+<div class="d-flex justify-content-center">
+    <div class="col-8">
+        <span class="fs-4 fw-bold">Управление группами</span>
+
+        <table class="table table-hover table-sm">
+            <thead>
+            <tr>
+                <th scope="col">Название</th>
+                <th scope="col">Приоритет</th>
+                <th scope="col">Дата создания</th>
+                <th scope="col">Дата изменения</th>
+                <th scope="col">
+                    <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#modalGroupAdd">Добавить запись
+                    </button>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in agentGroups %}
+            <tr>
+                <td style="display: none">{{ i.id }}</td>
+                <td>{{ i.agent_group_name|default:"" }}</td>
+                <td>{{ i.agent_group_priority|default:"" }}</td>
+                <td style="display: none">{{ i.agent_group_description|default:"" }}</td>
+                <td>{{ i.datetime_create|default:"" }}</td>
+                <td>{{ i.datetime_change|default:"" }}</td>
+                <td>
+                    <button type="button" class="editGroup btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#modalGroupEdit" value="{{ i.id }}">
+                        <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd"
+                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="deleteGroup btn btn-outline-danger btn-sm" data-id="{{ i.id }}">
+                        <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                            <path fill-rule="evenodd"
+                                  d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-4" style="padding-left: 25px;">
+        <span class="fs-4 fw-bold">Типы агентов</span>
+        <table class="table table-secondary table-hover table-bordered table-sm">
+            <thead class="table-light">
+            <tr style="height: 39px;">
+                <th class="col-4" scope="col">Название</th>
+                <th class="col-8" scope="col">Описание</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in agentTypes %}
+            <tr>
+                <td>{{ i.agent_type|default:"" }}</td>
+                <td>{{ i.agent_type_description|default:"" }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<span class="fs-4 fw-bold">Состояние нейронных сетей</span>
+<table class="table table-hover table-light">
     <thead>
     <tr>
-        <th scope="col">#</th>
-        <th scope="col">Имя группы</th>
-        <th scope="col">Приоритет группы</th>
-        <th scope="col">Дата создания</th>
-        <th scope="col">Дата изменения</th>
-        <th scope="col">
-            <button type="button" class="btn btn-outline-success btn-sm" onclick="selectGroupAgent()">Добавить запись
-            </button>
-        </th>
+        <th class="text-center" scope="col">Имя агента</th>
+        <th class="text-center" scope="col">Количество символов состояние нейронной сети</th>
+        <th class="text-center" scope="col">Описание</th>
+        <th class="text-center" scope="col">Дата создания</th>
+        <th class="text-center" scope="col">Дата изменения</th>
     </tr>
     </thead>
     <tbody>
-    {% for ag in agentGroups %}
+    {% for i in agentNeuralNetworkState %}
     <tr>
-        <td>{{ ag.id }}</td>
-        <td>{{ ag.agent_group_name }}</td>
-        <td>{{ ag.agent_group_priority }}</td>
-        <td>{{ ag.datetime_create }}</td>
-        <td>{{ ag.datetime_change }}</td>
-        <td>
-            <button type="button" class="btn btn-outline-primary btn-sm">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                    <path fill-rule="evenodd"
-                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                </svg>
-            </button>
-            <button type="button" class="btn btn-outline-danger btn-sm">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                    <path fill-rule="evenodd"
-                          d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                </svg>
-            </button>
-        </td>
+        <td class="text-center">{{ i.agent_name|default:"" }}</td>
+        <td class="text-center">{{ i.count_neural_network_state|default:"" }}</td>
+        <td class="text-center">{{ i.neural_network_state_description|default:"" }}</td>
+        <td class="text-center">{{ i.datetime_create|default:"" }}</td>
+        <td class="text-center">{{ i.datetime_change|default:"" }}</td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
-<span class="fs-4 fw-bold">Управление агентами</span>
-<hr>
-<table class="table table-hover">
+<span class="fs-4 fw-bold">Файлы агентов</span>
+<table class="table table-hover table-light">
     <thead>
     <tr>
-        <th scope="col">#</th>
-        <th scope="col">Имя агента</th>
-        <th scope="col">Статус агента</th>
-        <th scope="col">Группа агента</th>
-        <th scope="col">Тип агента</th>
-        <th scope="col">Порт агента</th>
-        <th scope="col">Дата изменения</th>
-        <th scope="col">
-            <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop">Добавить запись
-            </button>
-        </th>
+        <th class="text-center" scope="col">Имя агента</th>
+        <th class="text-center" scope="col">Имя файла</th>
+        <th class="text-center" scope="col">Тип файла</th>
+        <th class="text-center" scope="col">Путь к файлу</th>
+        <th class="text-center" scope="col">Описание файла</th>
+        <th class="text-center" scope="col">Дата создания</th>
+        <th class="text-center" scope="col">Дата изменения</th>
     </tr>
     </thead>
     <tbody>
-    {% for a in agentNeuralNetworkState %}
+    {% for i in agentFiles %}
     <tr>
-        <td>{{ a.id }}</td>
-        <td>{{ a.agent_id }}</td>
-        <td>{{ a.neural_network_state }}</td>
-        <td>{{ a.file_description }}</td>
-        <td>{{ a.create_datetime }}</td>
-        <td>
-            <button type="button" class="btn btn-outline-info btn-sm">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-info" viewBox="0 0 16 16">
-                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                </svg>
-            </button>
-            <button type="button" class="btn btn-outline-primary btn-sm">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                    <path fill-rule="evenodd"
-                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                </svg>
-            </button>
-            <button type="button" class="btn btn-outline-danger btn-sm">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                          d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                    <path fill-rule="evenodd"
-                          d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                </svg>
-            </button>
-        </td>
+        <td class="text-center">{{ i.agent_name }}</td>
+        <td class="text-center">{{ i.file_name }}</td>
+        <td class="text-center">{{ i.file_type }}</td>
+        <td class="text-center">{{ i.file_path }}</td>
+        <td class="text-center">{{ i.file_description }}</td>
+        <td class="text-center">{{ i.datetime_create|default:"" }}</td>
+        <td class="text-center">{{ i.datetime_change|default:"" }}</td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
-</div>
-<div class="p-3 col-2">
-    <span class="fs-4 fw-bold">Информация</span>
-    <hr>
-    <ul class="list-group">
-        <li class="list-group-item active" aria-current="true">Информация о агенте</li>
-        <li class="list-group-item">Тест</li>
-        <li class="list-group-item">Тест</li>
-        <li class="list-group-item">Тест</li>
-        <li class="list-group-item">Тест</li>
-        <li class="list-group-item">Тест</li>
-        <li class="list-group-item">Тест</li>
-    </ul>
-</div>
+
 {% endblock %}
 
 {% block modals %}
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modalAddAgent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="modalAddEditAgentLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Управление агентами</h5>
+                <h5 class="modal-title" id="modalAddEditAgentLabel">Добавить нового агента</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
             </div>
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
                         <label class="form-label">Имя агента</label>
-                        <input type="email" class="form-control" id="agentName">
-                        <div class="form-text">Имя агента должно быть уникальным.</div>
+                        <input type="email" class="form-control" id="agentNameAdd">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">MAC адрес агента</label>
-                        <input type="email" class="form-control" id="AgentMacAddress">
+                        <input type="email" class="form-control" id="AgentMacAddressAdd">
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <div class="mb-3 col-9">
+                            <label class="form-label">IP Адрес</label>
+                            <input class="form-control" id="AgentIPAddressAdd">
+                        </div>
+                        <div class="px-3 mb-3 col-3">
+                            <label class="px-1 form-label">Порт</label>
+                            <input class="form-control" id="AgentPortAdd">
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label for="agentDescription">Описание агента</label>
-                        <textarea class="form-control" id="agentDescription" rows="3"></textarea>
+                        <label for="agentDescriptionAdd">Описание агента</label>
+                        <textarea class="form-control" id="agentDescriptionAdd" rows="3"></textarea>
                     </div>
                     <div class="d-flex justify-content-start">
                         <div class="col-6">
                             <label class="form-label">Имя группы</label>
                             <form>
-                                <select id="agentGroup" class="form-select" aria-label="Default select example">
+                                <select id="agentGroupAdd" class="form-select" aria-label="Default select example">
                                     {% for a in agentGroups %}
                                     <option value="{{ a.id }}">{{ a.agent_group_name }}
                                     </option>
@@ -209,7 +247,7 @@
                         <div class="col-6">
                             <label class="form-label">Тип агента</label>
                             <form class="mb-3 px-1">
-                                <select id="agentType" class="form-select" aria-label="Default select example">
+                                <select id="agentTypeAdd" class="form-select" aria-label="Default select example">
                                     {% for a in agentTypes %}
                                     <option value="{{ a.id }}">{{ a.agent_type }}</option>
                                     {% endfor %}
@@ -218,14 +256,160 @@
                         </div>
                     </div>
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="agentStatus">
-                        <label class="form-check-label" for="agentStatus">Агент активен</label>
+                        <input type="checkbox" class="form-check-input" id="agentStatusAdd">
+                        <label class="form-check-label" for="agentStatusAdd">Агент активен</label>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                 <button type="button" id="saveAgentData" class="btn btn-primary" onclick="agentAddData()">Сохранить
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEditAgent" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="modalAddEditAgentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditAgentLabel">Изменить данные агента</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Имя агента</label>
+                        <p style="display: none" id="agentIDEdit"></p>
+                        <input type="email" class="form-control" id="agentNameEdit">
+                        <div class="form-text">Имя агента должно быть уникальным.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">MAC адрес агента</label>
+                        <input type="email" class="form-control" id="AgentMacAddressEdit">
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <div class="mb-3 col-9">
+                            <label class="form-label">IP Адрес</label>
+                            <input class="form-control" id="AgentIPAddressEdit">
+                        </div>
+                        <div class="px-3 mb-3 col-3">
+                            <label class="px-1 form-label">Порт</label>
+                            <input class="form-control" id="AgentPortEdit">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="agentDescriptionEdit">Описание агента</label>
+                        <textarea class="form-control" id="agentDescriptionEdit" rows="3"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <div class="col-6">
+                            <label class="form-label">Имя группы</label>
+                            <form>
+                                <select id="agentGroupEdit" class="form-select" aria-label="Default select example">
+                                    {% for i in agentGroups %}
+                                    <option value="{{ i.id }}">{{ i.agent_group_name }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Тип агента</label>
+                            <form class="mb-3 px-1">
+                                <select id="agentTypeEdit" class="form-select" aria-label="Default select example">
+                                    {% for a in agentTypes %}
+                                    <option value="{{ a.id }}">{{ a.agent_type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="agentStatusEdit">
+                        <label class="form-check-label" for="agentStatusEdit">Агент активен</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" id="saveAgentDataEdit" class="editAgentData btn btn-primary"
+                        onclick="agentEditData()">Изменить
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalGroupAdd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="modalAddEditAgentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalGroupAddLabel">Добавить новую группу</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="d-flex justify-content-start">
+                        <div class="mb-3 col-9">
+                            <label class="form-label">Имя группы</label>
+                            <input class="form-control" id="groupNameAdd">
+                        </div>
+                        <div class="px-3 mb-3 col-3">
+                            <label class="px-1 form-label">Приоритет</label>
+                            <input class="form-control" id="groupPriorityAdd" type="number" step="1" pattern="\d+">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="py-2" for="groupDescriptionAdd">Описание группы</label>
+                        <textarea class="form-control" id="groupDescriptionAdd" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" id="saveGroupDataAdd" class="editAgentData btn btn-primary"
+                        onclick="groupAddData()">Добавить
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalGroupEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="modalAddEditAgentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalGroupEditLabel">Изменить данные группы</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="d-flex justify-content-start">
+                        <div class="mb-3 col-9">
+                            <label class="form-label">Имя группы</label>
+                            <p style="display: none" id="groupIDEdit"></p>
+                            <input class="form-control" id="groupNameEdit">
+                        </div>
+                        <div class="px-3 mb-3 col-3">
+                            <label class="px-1 form-label">Приоритет</label>
+                            <input class="form-control" id="groupPriorityEdit" type="number" step="1" pattern="\d+">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="py-2" for="groupDescriptionEdit">Описание группы</label>
+                        <textarea class="form-control" id="groupDescriptionEdit" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                <button type="button" id="saveGroupDataEdit" class="editAgentData btn btn-primary"
+                        onclick="groupEditData()">Изменить
                 </button>
             </div>
         </div>

@@ -1,5 +1,9 @@
+graphTableClickListeners()
+var agentIDGraph = parseInt(document.querySelector('.clickable-row td:first-child').textContent)
 // Инициализируем график
-var chart = echarts.init(document.getElementById('chart'));
+var chartContainer = document.getElementById('chart');
+var chart = echarts.init(chartContainer);
+
 
 // Устанавливаем опции графика
 var options = {
@@ -26,18 +30,6 @@ var options = {
                 show: true,
                 yAxisIndex: 'none'
             },
-            myDarkModeSwitch: {
-                show: true,
-                title: 'Сменить тему',
-                icon: 'img/darkmode.png',
-                onclick: function (params) {
-                    if (chart.getOption().darkMode) {
-                        chart.setOption({ darkMode: false });
-                    } else {
-                        chart.setOption({ darkMode: true });
-                    }
-                }
-            },
             restore: {
                 show: true,
                 title: 'Перезагрузить данные'
@@ -48,160 +40,106 @@ var options = {
 
 // Устанавливаем опции графика
 chart.setOption(options);
-window.onload = graphDraw
+window.onload = graphDraw(agentIDGraph)
 
-function graphDraw() {
-    fetch('http://127.0.0.1:8000/api/graphData')
+function graphDraw(agentIDGraph) {
+    console.log(agentIDGraph)
+    fetch(`http://127.0.0.1:8000/api/graphData/?agent_id=${agentIDGraph}`)
         .then(response => response.json())
         .then(data => {
-            agentStep = Object.values(data).map(item => parseInt(item['agent_step']));
-            agentError = Object.values(data).map(item => parseInt(item['agent_error_value']));
-            agentName = data[0].agent_name
-            // Устанавливаем опции графика и загружаем данные
-            chart.setOption({
-                xAxis: {
-                    data: agentStep
-                },
-                series: [{
-                    name: agentName,
-                    data: agentError
-                }]
-            });
+            if (data.length > 0) {
+                agentStep = Object.values(data).map(item => parseInt(item['agent_step']));
+                agentError = Object.values(data).map(item => parseInt(item['agent_error_value']));
+                agentName = data[0].agent_name
+                // Устанавливаем опции графика и загружаем данные
+                chart.setOption({
+                    xAxis: {
+                        data: agentStep
+                    },
+                    series: [{
+                        name: agentName,
+                        data: agentError
+                    }],
+                    tooltip: {
+                        trigger: 'axis', // Set the trigger type to show tooltips on data points
+                        formatter: function (params) {
+                            // Customize the content of the tooltip
+                            let agentStep = params[0].axisValue; // Get the agent step value
+                            let agentError = params[0].data; // Get the agent error value
+                            let agentName = params[0].seriesName; // Get the agent name
+
+                            // Construct the tooltip content
+                            let tooltipContent = 'Шаг Агента: ' + agentStep + '<br />' +
+                                'Ошибка агента: ' + agentError + '<br />' +
+                                'Название агента: ' + agentName;
+
+                            return tooltipContent;
+                        }
+                    },
+                    graphic: [{
+                        type: 'text',
+                        left: 'center',
+                        top: 'middle',
+                        style: {
+                            text: '',
+                            textAlign: 'center',
+                            fontSize: 28
+                        }
+                    }]
+                });
+            } else {
+                // Show "No Data" text instead of the graph
+                chart.setOption({
+                    graphic: [{
+                        type: 'text',
+                        left: 'center',
+                        top: 'middle',
+                        style: {
+                            text: 'Нет данных для данного агента',
+                            textAlign: 'center',
+                            fontSize: 28
+                        }
+                    }],
+                    xAxis: {
+                        data: 0
+                    },
+                    series: [{
+                        name: '',
+                        data: 0
+                    }],
+                });
+            }
         })
         .catch(error => console.error(error));
 }
+
 // Задаем функцию для кнопки после вызова graphDraw()
-chart.on('restore', function(params) {
-    graphDraw();
+chart.on('restore', function (params) {
+    graphDraw(agentIDGraph);
 });
 
+function graphTableClickListeners() {
+    // Add click event listeners to each clickable row
+    var rows = document.getElementsByClassName('clickable-row');
+    for (var i = 0; i < rows.length; i++) {
+        rows[i].addEventListener('click', handleRowClick);
+    }
 
-/*
-// Загружаем данные графика при загрузке страницы
-fetch('http://127.0.0.1:8000/api/graphData')
-  .then(response => response.json())
-  .then(data => {
-    // Устанавливаем опции графика и загружаем данные
-    chart.setOption({
-      xAxis: {
-        type: 'category',
-        data: data.agent_step
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [{
-        type: 'line',
-        data: data.agent_error_value
-      }]
-    });
-  })
-  .catch(error => console.error(error));
-*/
-/*
-// Обновляем данные графика при клике на кнопку
-document.getElementById('buttonUpdate').addEventListener('click', function() {
-  fetch('http://example.com/data.json')
-    .then(response => response.json())
-    .then(data => {
-      // Обновляем данные графика
-      chart.setOption({
-        series: [{
-          data: data.yData
-        }]
-      });
-    })
-    .catch(error => console.error(error));
-});
-*/
-
-/*
-var url = 'http://127.0.0.1:8000/api/graphData';
-
-axios({
-  method: 'GET',
-  url: url,
-}).then(function(response) {
-  chart.updateSeries([{
-    name: 'agent_step',
-    data: response.data
-  }])
-})
-*/
-
-
-/*
-   const agent_port = document.querySelectorAll('td:nth-child(1)');
-   const coordinate_x = document.querySelectorAll('td:nth-child(2)');
-   const coordinate_y = document.querySelectorAll('td:nth-child(3)');
-   const datetime_create = document.querySelectorAll('td:nth-child(4)');
-
-   const agent_port_values = []
-   agent_port.forEach(function(singleCell) {
-   agent_port_values.push(singleCell.innerText);
-   });
-   const coordinate_x_values = []
-   coordinate_x.forEach(function(singleCell) {
-   coordinate_x_values.push(singleCell.innerText);
-   });
-   const coordinate_y_values = []
-   coordinate_y.forEach(function(singleCell) {
-   coordinate_y_values.push(singleCell.innerText);
-   });
-   const datetime_create_values = []
-   datetime_create.forEach(function(singleCell) {
-   datetime_create_values.push(singleCell.innerText);
-   });
-console.log(agent_port_values);
-console.log(coordinate_x_values);
-console.log(coordinate_y_values);
-console.log(datetime_create_values);
-*/
-
-/*
-const url = 'http://127.0.0.1:8000/api/graphData';
-
-
-function renameKey ( obj, oldKey, newKey ) {
-  obj[newKey] = obj[oldKey];
-  delete obj[oldKey];
+// Function to handle click on a row
+    function handleRowClick(event) {
+        // Get the selected row
+        var row = event.currentTarget;
+        // Toggle the "active" class on the row
+        row.classList.toggle('active');
+        // Get the data from each cell in the row
+        var rowData = Array.from(row.cells).map(cell => cell.textContent.trim());
+        // Print the captured data to the console (you can modify this part as needed)
+        agentIDGraph = rowData[0]
+        console.log(agentIDGraph);
+        graphDraw(agentIDGraph)
+    }
 }
 
-let updatedJson;
 
-const getData = async () => {
-  const response = await fetch(url);
-  const data = await response.json();
-  console.log(typeof data)
 
-  data.forEach( obj => renameKey( obj, 'id', 'x' ));
-  data.forEach( obj => renameKey( obj, 'agent_error_value', 'y' ));
-  updatedJson = data;
 
-  return data;
-};
-
-(async () => {
-  await getData();
-  console.log(updatedJson);
-
-var options = {
-  chart: {
-    type: 'line'
-  },
-    series: [{
-          name: 'Агент 1',
-          data: updatedJson
-        }, {
-          name: 'Агент 2',
-          data: updatedJson
-         }],
-    xaxis: {
-      type: 'number'
-    }
-};
-
-var chart = new ApexCharts(document.querySelector("#chart"), options);
-chart.render();
-})();
-*/

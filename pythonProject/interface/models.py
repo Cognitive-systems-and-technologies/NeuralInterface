@@ -11,9 +11,9 @@ from django.db import models
 # Таблицы базы данных
 class AgentGroups(models.Model):
     agent_group_name = models.CharField(max_length=100)
-    agent_group_priority = models.IntegerField()
-    datetime_create = models.DateTimeField()
-    datetime_change = models.DateTimeField()
+    agent_group_priority = models.IntegerField(blank=True, null=True)
+    datetime_create = models.DateTimeField(blank=True, null=True)
+    datetime_change = models.DateTimeField(blank=True, null=True)
     agent_group_description = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
@@ -39,6 +39,8 @@ class Agents(models.Model):
     datetime_change = models.DateTimeField(blank=True, null=True)
     agent_type = models.ForeignKey(AgentTypes, models.DO_NOTHING, blank=True, null=True)
     agent_mac_address = models.CharField(max_length=250, blank=True, null=True)
+    agent_ip_address = models.CharField(max_length=250, blank=True, null=True)
+    agent_port = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -46,12 +48,13 @@ class Agents(models.Model):
 
 
 class AgentFiles(models.Model):
-    agent_id = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
+    agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
     file_name = models.CharField(max_length=250, blank=True, null=True)
     file_type = models.CharField(max_length=250, blank=True, null=True)
     file_path = models.CharField(max_length=250, blank=True, null=True)
     file_description = models.CharField(max_length=250, blank=True, null=True)
-    create_datetime = models.DateTimeField(blank=True, null=True)
+    datetime_create = models.DateTimeField(blank=True, null=True)
+    datetime_change = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -61,7 +64,7 @@ class AgentFiles(models.Model):
 class AgentNeuralNetworkState(models.Model):
     agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
     neural_network_state = models.CharField(max_length=1000000, blank=True, null=True)
-    file_description = models.CharField(max_length=250, blank=True, null=True)
+    neural_network_state_description = models.CharField(max_length=250, blank=True, null=True)
     create_datetime = models.DateTimeField(blank=True, null=True)
 
     class Meta:
@@ -74,7 +77,7 @@ class AgentErrors(models.Model):
     agent_error_value = models.FloatField(blank=True, null=True)
     datetime_create = models.DateTimeField(blank=True, null=True)
     agent_error_info = models.CharField(max_length=250, blank=True, null=True)
-    agent_id = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
+    agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -86,12 +89,18 @@ class AgentsView(models.Model):
     id = models.IntegerField(primary_key=True)
     agent_name = models.CharField(max_length=250, blank=True, null=True)
     agent_group_name = models.CharField(max_length=100)
-    agent_status = models.IntegerField(blank=True, null=True)
+    agent_group_id = models.IntegerField()
+    agent_status = models.CharField(max_length=100)
+    agent_status_id = models.IntegerField()
     agent_description = models.CharField(max_length=250, blank=True, null=True)
     datetime_create = models.DateTimeField(blank=True, null=True)
     datetime_change = models.DateTimeField(blank=True, null=True)
     agent_type = models.CharField(max_length=100)
-    agent_mac_address = models.IntegerField(blank=True, null=True)
+    agent_type_id = models.IntegerField()
+    agent_mac_address = models.CharField(max_length=250, blank=True, null=True)
+    agent_ip_address = models.CharField(max_length=250, blank=True, null=True)
+    agent_ip_address_port = models.CharField(max_length=250, blank=True, null=True)
+    agent_port = models.CharField(max_length=250, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -119,7 +128,8 @@ class AgentFilesView(models.Model):
     file_type = models.CharField(max_length=250, blank=True, null=True)
     file_path = models.CharField(max_length=250, blank=True, null=True)
     file_description = models.CharField(max_length=250, blank=True, null=True)
-    create_datetime = models.DateTimeField(blank=True, null=True)
+    datetime_create = models.DateTimeField(blank=True, null=True)
+    datetime_change = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -145,6 +155,30 @@ class AgentTypesView(models.Model):
     class Meta:
         managed = False
         db_table = 'v_agent_types'
+
+
+# Представления базы данных
+class AgentNeuralNetworkStateView(models.Model):
+    id = models.IntegerField(primary_key=True)
+    count_neural_network_state = models.IntegerField()
+    neural_network_state_description = models.CharField(max_length=250, blank=True, null=True)
+    datetime_create = models.DateTimeField(blank=True, null=True)
+    datetime_change = models.DateTimeField(blank=True, null=True)
+    agent_name = models.CharField(max_length=250, blank=True, null=True)
+    agent_group_name = models.CharField(max_length=100)
+    agent_group_id = models.IntegerField()
+    agent_status = models.CharField(max_length=100)
+    agent_status_id = models.IntegerField()
+    agent_description = models.CharField(max_length=250, blank=True, null=True)
+    agent_type = models.CharField(max_length=100)
+    agent_type_id = models.IntegerField()
+    agent_mac_address = models.CharField(max_length=250, blank=True, null=True)
+    agent_ip_address = models.CharField(max_length=250, blank=True, null=True)
+    agent_port = models.CharField(max_length=250, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'v_agent_neural_network_state'
 
 
 

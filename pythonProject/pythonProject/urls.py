@@ -17,12 +17,21 @@ from django.contrib import admin
 from django.urls import path
 
 # from interface.views import interfaceAPIView
-from interface.views import index, monitor, GraphApiData, AgentAddData
+from interface.views import index, monitor, AgentAddData, AgentDeleteData, AgentEditData
+from interface.views import GroupAddData, GroupDeleteData, GroupEditData
+from interface.views import SendRequestDjango, GraphApiData, syncAgentData
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', index),
     path('monitor/', monitor),
-    path('api/graphData', GraphApiData.as_view()),
+    path('admin/', admin.site.urls),
     path('api/addAgentData', AgentAddData.as_view()),
+    path('api/editAgentData/<int:pk>/', AgentEditData.as_view(), name='Agents-edit'),
+    path('api/deleteAgentData/<int:pk>/', AgentDeleteData.as_view(), name='Agents-delete'),
+    path('api/addGroupData', GroupAddData.as_view()),
+    path('api/editGroupData/<int:pk>/', GroupEditData.as_view(), name='Agents-edit'),
+    path('api/deleteGroupData/<int:pk>/', GroupDeleteData.as_view(), name='Agents-delete'),
+    path('api/graphData/', GraphApiData.as_view(), name='graph-data'),
+    path('api/sendRequestDjango', SendRequestDjango.as_view()),
+    path('api/syncAgentData', syncAgentData, name='agent-sync'),
 ]
