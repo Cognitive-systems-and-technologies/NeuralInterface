@@ -1,0 +1,21 @@
+#sidebarMenu {
+    flex: 1 0 0; /* Occupy remaining vertical space */
+    background-color: #343a40;
+    color: #fff;
+    overflow-y: auto; /* Enable scrolling when content exceeds the height */
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+#sidebarMenu::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+#sidebarMenu::-webkit-scrollbar-thumb {
+    background-color: #6c757d; /* Color of the scrollbar thumb */
+}
+
+#sidebarMenu::-webkit-scrollbar-track {
+    background-color: #343a40; /* Color of the scrollbar track */
+}

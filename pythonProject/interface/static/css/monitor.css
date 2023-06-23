@@ -1,0 +1,19 @@
+ .circular-button {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      padding: 12px;
+      font-size: 20px;
+    }
+
+.scrollable-table {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.table .table-active {
+      background-color: #007bff; /* Set the primary color (blue) as the background color */
+      color: #fff; /* Set the text color to white */
+      cursor: pointer; /* Change cursor to pointer on hover */
+    }

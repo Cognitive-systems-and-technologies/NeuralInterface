@@ -19,7 +19,7 @@ function agentAddData() {
     };
     console.log(JSON.stringify(agentData))
     const csrftoken = getCookie('csrftoken');
-    fetch('http://127.0.0.1:8000/api/addAgentData', {
+    fetch(`/api/addAgentData`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ function groupAddData() {
     };
     console.log(JSON.stringify(groupData))
     const csrftoken = getCookie('csrftoken');
-    fetch('http://127.0.0.1:8000/api/addGroupData', {
+    fetch(`/api/addGroupData`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -366,7 +366,7 @@ function sendRequestDjango() {
     };
     console.log(JSON.stringify(requestData))
     const csrftoken = getCookie('csrftoken');
-    fetch('http://127.0.0.1:8000/api/sendRequestDjango', {
+    fetch(`/api/sendRequestDjango`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -388,31 +388,3 @@ function sendRequestDjango() {
             console.log('Error: ' + error);
         });
 }
-
-/*
-function selectGroupAgent() {
-    var items = document.querySelectorAll("#modalChangeGroupAgentList li");
-
-            for(var i = 0; i < items.length; i++)
-            {
-                items[i].onclick = function(){
-
-                    document.getElementById("modalGroupAgent").innerHTML = this.innerHTML;
-                    document.getElementById("modalGroupAgent").value = this.value;
-                    console.log(this.innerHTML, this.value);
-                };
-            }
-}
-*/
-
-
-/* global bootstrap: false */
-/*
-(function () {
-  'use strict'
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-  tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-    new bootstrap.Tooltip(tooltipTriggerEl)
-  })
-})()
-*/

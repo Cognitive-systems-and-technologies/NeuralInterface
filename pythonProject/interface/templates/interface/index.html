@@ -1,130 +1,136 @@
 <!-- Страница графика -->
 {% extends 'interface/base.html' %}
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <span class="fs-4 fw-bold">Управление агентами</span>
-
 <button class="btn btn-primary" onclick="sendRequestDjango()" style="display: none">Тест http request из Django</button>
-<table class="table table-hover col-12 table-sm">
-    <thead>
-    <tr>
-        <th class="text-center" scope="col">Статус</th>
-        <th class="text-center" scope="col">Название</th>
-        <th class="text-center" scope="col">Группа</th>
-        <th class="text-center" scope="col">Тип</th>
-        <th class="text-center" scope="col">MAC адрес</th>
-        <th class="text-center" scope="col">IP адрес и порт</th>
-        <th class="text-center" scope="col">Дата создания</th>
-        <th class="text-center" scope="col">Дата изменения</th>
-        <th scope="col">
-            <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#modalAddAgent">Добавить запись
-            </button>
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for a in agents %}
-    <tr>
-        <td style="display: none">{{ a.id }}</td>
-        <td>{% if a.agent_status == "Активен" %}
-            <svg class="text-success" width="30" height="30" fill="currentColor"
-                 viewBox="0 0 16 16">
-                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
-            </svg>
-            {% else %}
-            <svg class="text-danger" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                      d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                <path fill-rule="evenodd"
-                      d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-            </svg>
-            {% endif %}
-        </td>
-        <td class="text-center">{{ a.agent_name|default:"" }}</td>
-        <td class="text-center">{{ a.agent_group_name|default:"" }}</td>
-        <td class="text-center">{{ a.agent_type|default:"" }}</td>
-        <td class="text-center">{{ a.agent_mac_address|default:"" }}</td>
-        <td class="text-center">{{ a.agent_ip_address_port|default:"" }}</td>
-        <td class="text-center">{{ a.datetime_create|default:"" }}</td>
-        <td class="text-center">{{ a.datetime_change|default:"" }}</td>
-        <td style="display: none">{{ a.agent_description }}</td>
-        <td style="display: none">{{ a.agent_ip_address }}</td>
-        <td style="display: none">{{ a.agent_port }}</td>
-        <td style="display: none">{{ a.agent_group_id }}</td>
-        <td style="display: none">{{ a.agent_type_id }}</td>
-        <td style="display: none">{{ a.agent_status_id }}</td>
-        <td>
-            <button type="button" id="editAgent" class="editAgent btn btn-outline-primary btn-sm" data-bs-toggle="modal"
-                    data-bs-target="#modalEditAgent" value="{{ a.id }}">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                    <path fill-rule="evenodd"
-                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+<div class="scrollable-table">
+    <table class="table table-hover table-light col-12 table-sm">
+        <thead>
+        <tr>
+            <th class="text-center" scope="col">Статус</th>
+            <th class="text-center" scope="col">Название</th>
+            <th class="text-center" scope="col">Группа</th>
+            <th class="text-center" scope="col">Тип</th>
+            <th class="text-center" scope="col">MAC адрес</th>
+            <th class="text-center" scope="col">IP адрес и порт</th>
+            <th class="text-center" scope="col">Дата создания</th>
+            <th class="text-center" scope="col">Дата изменения</th>
+            <th class="text-center" scope="col">
+                <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#modalAddAgent">Добавить
+                </button>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for a in agents %}
+        <tr>
+            <td style="display: none">{{ a.id }}</td>
+            <td>{% if a.agent_status == "Активен" %}
+                <svg class="text-success" width="30" height="30" fill="currentColor"
+                     viewBox="0 0 16 16">
+                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                 </svg>
-            </button>
-            <button type="button" id="deleteAgent" class="deleteAgent btn btn-outline-danger btn-sm"
-                    data-id="{{ a.id }}">
-                <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                {% else %}
+                <svg class="text-danger" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
                           d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
                     <path fill-rule="evenodd"
                           d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
                 </svg>
-            </button>
-        </td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+                {% endif %}
+            </td>
+            <td class="text-center">{{ a.agent_name|default:"" }}</td>
+            <td class="text-center">{{ a.agent_group_name|default:"" }}</td>
+            <td class="text-center">{{ a.agent_type|default:"" }}</td>
+            <td class="text-center">{{ a.agent_mac_address|default:"" }}</td>
+            <td class="text-center">{{ a.agent_ip_address_port|default:"" }}</td>
+            <td class="text-center">{{ a.datetime_create|default:"" }}</td>
+            <td class="text-center">{{ a.datetime_change|default:"" }}</td>
+            <td style="display: none">{{ a.agent_description }}</td>
+            <td style="display: none">{{ a.agent_ip_address }}</td>
+            <td style="display: none">{{ a.agent_port }}</td>
+            <td style="display: none">{{ a.agent_group_id }}</td>
+            <td style="display: none">{{ a.agent_type_id }}</td>
+            <td style="display: none">{{ a.agent_status_id }}</td>
+            <td class="text-center">
+                <button type="button" id="editAgent" class="editAgent btn btn-outline-primary btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalEditAgent" value="{{ a.id }}">
+                    <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                        <path fill-rule="evenodd"
+                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg>
+                </button>
+                <button type="button" id="deleteAgent" class="deleteAgent btn btn-outline-danger btn-sm"
+                        data-id="{{ a.id }}">
+                    <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                        <path fill-rule="evenodd"
+                              d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                    </svg>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 <div class="d-flex justify-content-center">
     <div class="col-8">
         <span class="fs-4 fw-bold">Управление группами</span>
-
-        <table class="table table-hover table-sm">
-            <thead>
-            <tr>
-                <th scope="col">Название</th>
-                <th scope="col">Приоритет</th>
-                <th scope="col">Дата создания</th>
-                <th scope="col">Дата изменения</th>
-                <th scope="col">
-                    <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalGroupAdd">Добавить запись
-                    </button>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for i in agentGroups %}
-            <tr>
-                <td style="display: none">{{ i.id }}</td>
-                <td>{{ i.agent_group_name|default:"" }}</td>
-                <td>{{ i.agent_group_priority|default:"" }}</td>
-                <td style="display: none">{{ i.agent_group_description|default:"" }}</td>
-                <td>{{ i.datetime_create|default:"" }}</td>
-                <td>{{ i.datetime_change|default:"" }}</td>
-                <td>
-                    <button type="button" class="editGroup btn btn-outline-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalGroupEdit" value="{{ i.id }}">
-                        <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                            <path fill-rule="evenodd"
-                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                        </svg>
-                    </button>
-                    <button type="button" class="deleteGroup btn btn-outline-danger btn-sm" data-id="{{ i.id }}">
-                        <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                  d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                            <path fill-rule="evenodd"
-                                  d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                        </svg>
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="scrollable-table">
+            <table class="table table-hover table-light table-sm">
+                <thead>
+                <tr>
+                    <th scope="col">Название</th>
+                    <th scope="col">Приоритет</th>
+                    <th scope="col">Дата создания</th>
+                    <th scope="col">Дата изменения</th>
+                    <th class="text-center" scope="col">
+                        <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalGroupAdd">Добавить
+                        </button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in agentGroups %}
+                <tr>
+                    <td style="display: none">{{ i.id }}</td>
+                    <td>{{ i.agent_group_name|default:"" }}</td>
+                    <td>{{ i.agent_group_priority|default:"" }}</td>
+                    <td style="display: none">{{ i.agent_group_description|default:"" }}</td>
+                    <td>{{ i.datetime_create|default:"" }}</td>
+                    <td>{{ i.datetime_change|default:"" }}</td>
+                    <td class="text-center">
+                        <button type="button" class="editGroup btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalGroupEdit" value="{{ i.id }}">
+                            <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
+                                 viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd"
+                                      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                            </svg>
+                        </button>
+                        <button type="button" class="deleteGroup btn btn-outline-danger btn-sm" data-id="{{ i.id }}">
+                            <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                                <path fill-rule="evenodd"
+                                      d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="col-4" style="padding-left: 25px;">
         <span class="fs-4 fw-bold">Типы агентов</span>
@@ -147,56 +153,59 @@
     </div>
 </div>
 <span class="fs-4 fw-bold">Состояние нейронных сетей</span>
-<table class="table table-hover table-light">
-    <thead>
-    <tr>
-        <th class="text-center" scope="col">Имя агента</th>
-        <th class="text-center" scope="col">Количество символов состояние нейронной сети</th>
-        <th class="text-center" scope="col">Описание</th>
-        <th class="text-center" scope="col">Дата создания</th>
-        <th class="text-center" scope="col">Дата изменения</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for i in agentNeuralNetworkState %}
-    <tr>
-        <td class="text-center">{{ i.agent_name|default:"" }}</td>
-        <td class="text-center">{{ i.count_neural_network_state|default:"" }}</td>
-        <td class="text-center">{{ i.neural_network_state_description|default:"" }}</td>
-        <td class="text-center">{{ i.datetime_create|default:"" }}</td>
-        <td class="text-center">{{ i.datetime_change|default:"" }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="scrollable-table">
+    <table class="table table-hover table-light">
+        <thead>
+        <tr>
+            <th class="text-center" scope="col">Имя агента</th>
+            <th class="text-center" scope="col">Количество символов состояние нейронной сети</th>
+            <th class="text-center" scope="col">Описание</th>
+            <th class="text-center" scope="col">Дата создания</th>
+            <th class="text-center" scope="col">Дата изменения</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in agentNeuralNetworkState %}
+        <tr>
+            <td class="text-center">{{ i.agent_name|default:"" }}</td>
+            <td class="text-center">{{ i.count_neural_network_state|default:"" }}</td>
+            <td class="text-center">{{ i.neural_network_state_description|default:"" }}</td>
+            <td class="text-center">{{ i.datetime_create|default:"" }}</td>
+            <td class="text-center">{{ i.datetime_change|default:"" }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 <span class="fs-4 fw-bold">Файлы агентов</span>
-<table class="table table-hover table-light">
-    <thead>
-    <tr>
-        <th class="text-center" scope="col">Имя агента</th>
-        <th class="text-center" scope="col">Имя файла</th>
-        <th class="text-center" scope="col">Тип файла</th>
-        <th class="text-center" scope="col">Путь к файлу</th>
-        <th class="text-center" scope="col">Описание файла</th>
-        <th class="text-center" scope="col">Дата создания</th>
-        <th class="text-center" scope="col">Дата изменения</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for i in agentFiles %}
-    <tr>
-        <td class="text-center">{{ i.agent_name }}</td>
-        <td class="text-center">{{ i.file_name }}</td>
-        <td class="text-center">{{ i.file_type }}</td>
-        <td class="text-center">{{ i.file_path }}</td>
-        <td class="text-center">{{ i.file_description }}</td>
-        <td class="text-center">{{ i.datetime_create|default:"" }}</td>
-        <td class="text-center">{{ i.datetime_change|default:"" }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
+<div class="scrollable-table">
+    <table class="table table-hover table-light">
+        <thead>
+        <tr>
+            <th class="text-center" scope="col">Имя агента</th>
+            <th class="text-center" scope="col">Имя файла</th>
+            <th class="text-center" scope="col">Тип файла</th>
+            <th class="text-center" scope="col">Путь к файлу</th>
+            <th class="text-center" scope="col">Описание файла</th>
+            <th class="text-center" scope="col">Дата создания</th>
+            <th class="text-center" scope="col">Дата изменения</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in agentFiles %}
+        <tr>
+            <td class="text-center">{{ i.agent_name }}</td>
+            <td class="text-center">{{ i.file_name }}</td>
+            <td class="text-center">{{ i.file_type }}</td>
+            <td class="text-center">{{ i.file_path }}</td>
+            <td class="text-center">{{ i.file_description }}</td>
+            <td class="text-center">{{ i.datetime_create|default:"" }}</td>
+            <td class="text-center">{{ i.datetime_change|default:"" }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
 
 {% block modals %}
@@ -418,7 +427,6 @@
 {% endblock %}
 
 {% block scripts %}
-{% load static %}
 <script src="{% static 'js/index.js' %}"></script>
 {% endblock %}
 

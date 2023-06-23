@@ -43,6 +43,15 @@ def monitor(request):
     return HttpResponse(template.render(array, request))
 
 
+# Формирование шаблона и данных для серверного рендеринга страницы с информацией
+def info(request):
+    template = loader.get_template('interface/info.html')
+    agents = AgentsView.objects.all()
+    agentErrors = AgentErrorsView.objects.all()
+    array = {'agents': agents, 'agentErrors': agentErrors}
+    return HttpResponse(template.render(array, request))
+
+
 # Django REST API. Данные для добавления новой записи агента
 class AgentAddData(generics.ListAPIView):
     def post(self, request):

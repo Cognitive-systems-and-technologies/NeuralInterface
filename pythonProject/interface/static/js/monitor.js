@@ -44,7 +44,7 @@ window.onload = graphDraw(agentIDGraph)
 
 function graphDraw(agentIDGraph) {
     console.log(agentIDGraph)
-    fetch(`http://127.0.0.1:8000/api/graphData/?agent_id=${agentIDGraph}`)
+    fetch(`/api/graphData/?agent_id=${agentIDGraph}`)
         .then(response => response.json())
         .then(data => {
             if (data.length > 0) {
@@ -129,14 +129,26 @@ function graphTableClickListeners() {
     function handleRowClick(event) {
         // Get the selected row
         var row = event.currentTarget;
-        // Toggle the "active" class on the row
-        row.classList.toggle('active');
+
+        // Remove table-active class from all rows
+        var table = row.closest('table');
+        var rows = table.getElementsByClassName('clickable-row');
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].classList.remove('table-active');
+        }
+
+        // Toggle the "table-active" class on the clicked row
+        row.classList.toggle('table-active');
+
         // Get the data from each cell in the row
         var rowData = Array.from(row.cells).map(cell => cell.textContent.trim());
+
         // Print the captured data to the console (you can modify this part as needed)
-        agentIDGraph = rowData[0]
+        var agentIDGraph = rowData[0];
         console.log(agentIDGraph);
-        graphDraw(agentIDGraph)
+
+        // Call your graphDraw function with the agent ID
+        graphDraw(agentIDGraph);
     }
 }
 

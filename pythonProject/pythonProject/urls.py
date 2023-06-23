@@ -17,13 +17,15 @@ from django.contrib import admin
 from django.urls import path
 
 # from interface.views import interfaceAPIView
-from interface.views import index, monitor, AgentAddData, AgentDeleteData, AgentEditData
-from interface.views import GroupAddData, GroupDeleteData, GroupEditData
-from interface.views import SendRequestDjango, GraphApiData, syncAgentData
+from interface.views import index, monitor, info, \
+     AgentAddData, AgentDeleteData, AgentEditData, \
+     GroupAddData, GroupDeleteData, GroupEditData, \
+     SendRequestDjango, GraphApiData, syncAgentData
 
 urlpatterns = [
     path('', index),
     path('monitor/', monitor),
+    path('info/', info),
     path('admin/', admin.site.urls),
     path('api/addAgentData', AgentAddData.as_view()),
     path('api/editAgentData/<int:pk>/', AgentEditData.as_view(), name='Agents-edit'),
