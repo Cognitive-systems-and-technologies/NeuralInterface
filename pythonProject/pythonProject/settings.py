@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'interface.apps.InterfaceConfig',
     'rest_framework',
     'bootstrap5',
-    'django_tables2',
 ]
 
 MIDDLEWARE = [

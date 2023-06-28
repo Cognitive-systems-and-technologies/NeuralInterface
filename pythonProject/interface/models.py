@@ -9,6 +9,7 @@ from django.db import models
 
 
 # Таблицы базы данных
+# Группы агентов
 class AgentGroups(models.Model):
     agent_group_name = models.CharField(max_length=100)
     agent_group_priority = models.IntegerField(blank=True, null=True)
@@ -20,7 +21,7 @@ class AgentGroups(models.Model):
         managed = False
         db_table = 't_agent_groups'
 
-
+# Типы агентов
 class AgentTypes(models.Model):
     agent_type = models.CharField(max_length=100)
     agent_type_description = models.CharField(max_length=250, blank=True, null=True)
@@ -29,7 +30,7 @@ class AgentTypes(models.Model):
         managed = False
         db_table = 't_agent_types'
 
-
+# Агенты
 class Agents(models.Model):
     agent_name = models.CharField(max_length=250, blank=True, null=True)
     agent_group = models.ForeignKey(AgentGroups, models.DO_NOTHING, blank=True, null=True)
@@ -46,7 +47,7 @@ class Agents(models.Model):
         managed = False
         db_table = 't_agents'
 
-
+# Файлы агентов
 class AgentFiles(models.Model):
     agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
     file_name = models.CharField(max_length=250, blank=True, null=True)
@@ -61,6 +62,7 @@ class AgentFiles(models.Model):
         db_table = 't_agent_files'
 
 
+# Состояние нейросети агентов
 class AgentNeuralNetworkState(models.Model):
     agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
     neural_network_state = models.CharField(max_length=1000000, blank=True, null=True)
@@ -72,6 +74,7 @@ class AgentNeuralNetworkState(models.Model):
         db_table = 't_agent_neural_network_state'
 
 
+# Ошибки агентов
 class AgentErrors(models.Model):
     agent_step = models.IntegerField(blank=True, null=True)
     agent_error_value = models.FloatField(blank=True, null=True)
@@ -85,6 +88,7 @@ class AgentErrors(models.Model):
 
 
 # Представления базы данных
+# Представление агентов
 class AgentsView(models.Model):
     id = models.IntegerField(primary_key=True)
     agent_name = models.CharField(max_length=250, blank=True, null=True)
@@ -107,6 +111,7 @@ class AgentsView(models.Model):
         db_table = 'v_agents'
 
 
+# Представление ошибок агентов
 class AgentErrorsView(models.Model):
     id = models.IntegerField(primary_key=True)
     agent_step = models.IntegerField(blank=True, null=True)
@@ -121,6 +126,7 @@ class AgentErrorsView(models.Model):
         db_table = 'v_agent_errors'
 
 
+# Представление файлов агентов
 class AgentFilesView(models.Model):
     id = models.IntegerField(primary_key=True)
     agent_name = models.CharField(max_length=100)
@@ -136,6 +142,7 @@ class AgentFilesView(models.Model):
         db_table = 'v_agent_files'
 
 
+# Представление групп агентов
 class AgentGroupsView(models.Model):
     agent_group_name = models.CharField(max_length=100)
     agent_group_priority = models.IntegerField()
@@ -148,6 +155,7 @@ class AgentGroupsView(models.Model):
         db_table = 'v_agent_groups'
 
 
+# Представление типов агентов
 class AgentTypesView(models.Model):
     agent_type = models.CharField(max_length=100)
     agent_type_description = models.CharField(max_length=250, blank=True, null=True)
@@ -157,7 +165,7 @@ class AgentTypesView(models.Model):
         db_table = 'v_agent_types'
 
 
-# Представления базы данных
+# Представления нейросетевого состояния агентов
 class AgentNeuralNetworkStateView(models.Model):
     id = models.IntegerField(primary_key=True)
     count_neural_network_state = models.IntegerField()

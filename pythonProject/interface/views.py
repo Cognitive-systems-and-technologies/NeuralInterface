@@ -17,6 +17,7 @@ from django.views.generic import ListView
 import json
 from datetime import datetime
 import requests
+from requests.exceptions import RequestException
 from django.http import JsonResponse
 from django.middleware import csrf
 
@@ -96,20 +97,31 @@ class AgentEditData(generics.UpdateAPIView):
     serializer_class = AgentEditSerializer
 
     def update(self, request, *args, **kwargs):
+        global agent_another
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         if serializer.is_valid():
+            # Получаем данные из запроса
             agent_group_id = request.data.get('agent_group_id')
             agent_type_id = request.data.get('agent_type_id')
-            agent_mac_address = request.data.get('agent_mac_address')
+            agent_mac_address_query = request.data.get('agent_mac_address')
+            # Получаем id агента
             agent_id = instance.id
-            agent = Agents.objects.get(agent_mac_address=agent_mac_address)
-            agent_id_db = agent.id
-            agent_mac_address_check = Agents.objects.filter(agent_mac_address=agent_mac_address).exists()
-
-            if agent_mac_address_check and agent_id != agent_id_db:
-                message = "Агент с таким MAC адрессом уже существует"
-                return Response(message, status=status.HTTP_200_OK)
+            # Получаем данные из БД по id агента
+            agent_current = Agents.objects.get(id=agent_id)
+            # Получаем данные из БД по MAC адресу
+            try:
+                # Пытаемся получить данные
+                agent_another = Agents.objects.get(agent_mac_address=agent_mac_address_query)
+                # Если данные id агента полученный из БД по id агента (текущий агент) совпадает с
+                # id агентам полученным из БД по MAC адресу (другой агент с таким же MAC адресом),
+                # то завершаем проверку с выводом соответствующего статуса
+                if agent_current.id != agent_another.id:
+                    message = "Агент с таким MAC адресом уже существует"
+                    return Response(message, status=status.HTTP_200_OK)
+            except Agents.DoesNotExist:
+                # Если данных нет, то код продолжает выполняться
+                pass
 
             try:
                 agent_group = AgentGroups.objects.get(id=agent_group_id)
@@ -252,23 +264,39 @@ class GraphApiData(generics.ListAPIView):
         return AgentErrorsView.objects.filter(agent_id=agent_id)
 
 
-class SendRequestDjango(generics.ListAPIView):
+class SendRequestToAgent(generics.ListAPIView):
     def post(self, request):
-
         csrf_token = request.META.get('CSRF_COOKIE', '')
-
-        # Set up the request headers
         headers = {
             'X-CSRFToken': csrf_token  # Include the CSRF token in the headers
         }
-        print(headers)
-        # Send an HTTP request using the extracted data
-        response = requests.post('http://127.0.0.1:8000/api/graphData', headers=headers)
-
-        # Process the response
-        if response.status_code == 200:
-            # Request successful
-            return JsonResponse({'success': True})
+        agentId = request.data.get('agent_id')
+        agentCommand = request.data.get('agent_command')
+        agentData = Agents.objects.get(id=agentId)
+        agentIpAddress = agentData.agent_ip_address
+        agentPort = agentData.agent_port
+        if agentIpAddress is None or agentPort is None or agentIpAddress == '' or agentPort == '':
+            return Response("Проверьте данные IP адреса и порта агента", status=400)
         else:
-            # Request failed
-            return JsonResponse({'success': False, 'error': 'Request failed'})
+            url = 'http://' + agentIpAddress + ':' + agentPort
+            data = {
+                'r': 'domain',
+                't': 'command',
+                'm': agentCommand
+            }
+            # Send an HTTP request using the extracted data
+            try:
+                response = requests.post(url, headers=headers, json=data)
+                response.raise_for_status()
+                # Process the response here
+                result = response.json()
+                # Return the success response
+                return Response(result, status=status.HTTP_200_OK)
+            except ConnectionError as e:
+                # Handle the connection error
+                message = 'Ошибка: Ошибка соединения - ' + str(e)
+                return Response(message, status=status.HTTP_200_OK)
+            except requests.exceptions.RequestException as e:
+                # Handle other request exceptions
+                message = 'Ошибка: ' + str(e)
+                return Response(message, status=status.HTTP_200_OK)

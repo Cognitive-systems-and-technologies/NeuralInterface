@@ -20,7 +20,7 @@ from django.urls import path
 from interface.views import index, monitor, info, \
      AgentAddData, AgentDeleteData, AgentEditData, \
      GroupAddData, GroupDeleteData, GroupEditData, \
-     SendRequestDjango, GraphApiData, syncAgentData
+     SendRequestToAgent, GraphApiData, syncAgentData
 
 urlpatterns = [
     path('', index),
@@ -34,6 +34,6 @@ urlpatterns = [
     path('api/editGroupData/<int:pk>/', GroupEditData.as_view(), name='Agents-edit'),
     path('api/deleteGroupData/<int:pk>/', GroupDeleteData.as_view(), name='Agents-delete'),
     path('api/graphData/', GraphApiData.as_view(), name='graph-data'),
-    path('api/sendRequestDjango', SendRequestDjango.as_view()),
+    path('api/SendRequestToAgent', SendRequestToAgent.as_view()),
     path('api/syncAgentData', syncAgentData, name='agent-sync'),
 ]
