@@ -1,0 +1,188 @@
+{% extends 'interface/base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/monitor.css' %}">
+<span class="fs-4 fw-bold">Мониторинг</span>
+<hr>
+<div class="col-sm-12" id="chart" style="height: 500px;"></div>
+<div class="d-flex justify-content-center">
+    <div class="scrollable-item">
+        <table class="table table-hover bg-light col-12 table-sm">
+            <thead>
+            <tr>
+                <th class="text-center" scope="col">Статус</th>
+                <th class="text-center" scope="col">Название</th>
+                <th class="text-center" scope="col">Группа</th>
+                <th class="text-center" scope="col">Тип</th>
+                <th class="text-center" scope="col">MAC адрес</th>
+                <th class="text-center" scope="col">IP адрес и порт</th>
+                <th class="text-center" scope="col">Дата изменения</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for a in agents %}
+            <tr class="clickable-row">
+                <td style="display: none">{{ a.id }}</td>
+                <td>{% if a.agent_status == "Активен" %}
+                    <svg class="text-success" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+                        <path
+                                d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                    </svg>
+                    {% else %}
+                    <svg class="text-danger" width="30" height="30" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                        <path fill-rule="evenodd"
+                              d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                    </svg>
+                    {% endif %}
+                </td>
+                <td class="text-center">{{ a.agent_name|default:"" }}</td>
+                <td class="text-center">{{ a.agent_group_name|default:"" }}</td>
+                <td class="text-center">{{ a.agent_type|default:"" }}</td>
+                <td class="text-center">{{ a.agent_mac_address|default:"" }}</td>
+                <td class="text-center">{{ a.agent_ip_address_port|default:"" }}</td>
+                <td style="display: none">{{ a.datetime_create|default:"" }}</td>
+                <td class="text-center">{{ a.datetime_change|default:"" }}</td>
+                <td style="display: none">{{ a.agent_description }}</td>
+                <td style="display: none">{{ a.agent_ip_address }}</td>
+                <td style="display: none">{{ a.agent_port }}</td>
+                <td style="display: none">{{ a.agent_group_id }}</td>
+                <td style="display: none">{{ a.agent_type_id }}</td>
+                <td style="display: none">{{ a.agent_status_id }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div style="padding-left: 25px; width: 375px">
+        <div class="card text-dark bg-light mb-3">
+            <div id="headerStatus" value=""></div>
+            <div class="card-body">
+                <div class="tab-pane fade show active ms-2" id="pills-home" role="tabpanel"
+                     aria-labelledby="pills-home-tab">
+                    <div class="row mb-2">
+                        <div class="d-flex justify-content-center">
+                            <span class="mb-2">Прямое управление агентом</span>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-outline-primary me-2 agentCommand" value="forward">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-chevron-up"
+                                     viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                          d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                                </svg>
+                            </button>
+                            <button class="btn btn-outline-primary me-2 agentCommand" value="backward">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-chevron-down"
+                                     viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </button>
+                            <button class="btn btn-outline-primary me-2 agentCommand" value="left">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-chevron-left"
+                                     viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                                </svg>
+                            </button>
+                            <button class="btn btn-outline-primary me-2 agentCommand" value="right">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-chevron-right"
+                                     viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                          d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </button>
+                            <button class="btn btn-outline-danger me-2 agentCommand" value="stop">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-stop"
+                                     viewBox="0 0 16 16">
+                                    <path
+                                            d="M3.5 5A1.5 1.5 0 0 1 5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5zM5 4.5a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5V5a.5.5 0 0 0-.5-.5H5z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="d-flex justify-content-center">
+                            <span class="mb-2">Обучение агента</span>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-outline-success me-2 agentCommand" value="start_learning">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-play"
+                                     viewBox="0 0 16 16">
+                                    <path
+                                            d="M10.804 8 5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z"/>
+                                </svg>
+                                Начать
+                            </button>
+                            <button class="btn btn-outline-danger me-2 agentCommand" value="stop_learning">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-stop"
+                                     viewBox="0 0 16 16">
+                                    <path
+                                            d="M3.5 5A1.5 1.5 0 0 1 5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5zM5 4.5a.5.5 0 0 0-.5.5v6a.5.5 0 0 0 .5.5h6a.5.5 0 0 0 .5-.5V5a.5.5 0 0 0-.5-.5H5z"/>
+                                </svg>
+                                Остановить
+                            </button>
+                            <button class="btn btn-outline-danger me-2 agentCommand" value="reset">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+                                     viewBox="0 0 16 16">
+                                    <path
+                                            d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="d-flex justify-content-center">
+                            <span class="mb-2">Управление данными обучения агентов</span>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-outline-primary me-2 agentCommand" value="upload">
+                                <svg width="16" height="16" fill="currentColor"
+                                     class="bi bi-upload" viewBox="0 0 16 16">
+                                    <path
+                                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path
+                                            d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                                </svg>
+                                Загрузить
+                            </button>
+                            <button class="btn btn-outline-primary me-2 agentCommand" value="download">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-download"
+                                     viewBox="0 0 16 16">
+                                    <path
+                                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                    <path
+                                            d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                </svg>
+                                Выгрузить
+                            </button>
+                            <button class="btn btn-outline-danger me-2" value="delete_data" onclick="deleteAgentErrors()">
+                                <svg width="16" height="16" fill="currentColor" class="bi bi-x-lg"
+                                     viewBox="0 0 16 16">
+                                    <path
+                                            d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex justify-content-center">
+    <div class="card text-dark bg-light">
+        <div class="card-body" id="footerStatus"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+<script src="{% static 'js/monitor.js' %}"></script>
+{% endblock %}

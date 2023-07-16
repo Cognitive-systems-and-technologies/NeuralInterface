@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Neural network for finding a way out of the labyrinth">
+    <meta name="author" content="Denis Shershakov, Nikita Rudeshko, Nikolay Timchenko, Yriy Dubenko">
+    <meta name="generator" content="Python Django 4.1">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <!--
+    <script src="{% static 'echarts/dist/echarts.min.js' %}"></script>
+    <script src="{% static 'echarts/dist/echarts.js' %}"></script>
+    <script src="{% static 'echarts/dist/echarts.js.map' %}"></script>
+    -->
+    <title>Панель управления</title>
+
+</head>
+<body class="d-flex flex-column">
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-2 bg-dark sidebar text-white align-items-start">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a href="/"
+                           class="d-flex align-items-center p-2 mb-md-0 me-md-auto text-white text-decoration-none">
+                            <img src="{% static 'images/neural_brain_purple.png' %}" width="60" height="60"
+                                 fill="currentColor" class="bi me-2" viewBox="0 0 16 16">
+                            <span class="fs-5">Панель управления</span>
+                        </a>
+                    </li>
+                    <hr>
+                    <li class="nav-item">
+                        <a href="/monitor" class="nav-link text-white">
+                            <img src="{% static 'images/graph_purple.png' %}" class="bi me-2" width="50" height="40">
+                            <span class="image-label">Мониторинг</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/info" class="nav-link text-white">
+                            <img src="{% static 'images/admin_purple.png' %}" class="bi me-2" width="50" height="40">
+                            <span class="image-label">Информация о проекте</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin" class="nav-link text-white">
+                            <img src="{% static 'images/settings_purple.png' %}" class="bi me-2" width="50" height="40">
+                            <span class="image-label">Панель администратора</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <main class="col-md-10 px-md-4 py-3">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+</div>
+
+{% block modals %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>
