@@ -338,9 +338,10 @@ class GraphAgentDataAdd(generics.ListAPIView):
         mes_data = request.data
         if mes_data['m'] == 'loss':
             agent_data = mes_data['b']
-            agent_data = '{"points":{"actor": [0,0.7345353,1,0.353553,2,0.12313123], "critik": [1,0.5345345345,2,0.446464645,3,0.1213123131], "acto": [0,0.8912,1,0.7689,2,0.56787578], "actor": [0,0.7345353,1,0.353553,2,0.12313123]}}'
-            data_conversion = json.loads(agent_data)
-            points = data_conversion['points']
+            # Данные для тестирования
+            # agent_data = '{"points":{"actor": [0,0.7345353,1,0.353553,2,0.12313123], "critik": [1,0.5345345345,2,0.446464645,3,0.1213123131], "acto": [0,0.8912,1,0.7689,2,0.56787578], "actor": [0,0.7345353,1,0.353553,2,0.12313123]}}'
+            # data_conversion = json.loads(agent_data)
+            points = agent_data['points']
             # Get the agent IP address from where the request came
             agent_ip_address = request.META.get('REMOTE_ADDR')
             print(agent_ip_address)

@@ -1,18 +1,33 @@
-# Neural Network Labyrinth Solver
+# Интерфейс для обучения агентов
 
-## Description
+## Описание
 
-This project implements a neural network-based algorithm to find a way out of a labyrinth. The neural network learns to navigate through the labyrinth by training on a set of labeled labyrinth maps.
+Этот проект реализует алгоритм на основе нейронной сети для поиска выхода из лабиринта. Нейронная сеть учится перемещаться по лабиринту, обучаясь на наборе размеченных карт лабиринта.
 
-The goal is to provide a solution to the problem of finding the shortest path from the starting point to the exit of a given labyrinth.
+Цель состоит в том, чтобы предоставить решение проблемы поиска кратчайшего пути от начальной точки до выхода из заданного лабиринта.
 
-## Installation
+Данный проект создан для управления агентами и их данными, отображения актуальной информации об обучении агентов.
 
-1. Clone the repository:
+## Установка
+1. Установите python с версией не менее 3.9. 
 
-   git clone https://github.com/your-username/labyrinth-solver.git
+   Ссылка: https://www.python.org/downloads/
+2. Установите Git.
+   
+   Ссылка: https://git-scm.com/downloads
 
-2. Create and activate a virtual environment:
+3. Откройте командную строку и пропишите путь к папке, в которой будет запускаться проект, используя команду: 
+   
+   cd C:\Project
+
+   Замените C:\Project на необходимую Вам дерикторию. 
+4. Пропишите команду, используя командную строку:
+   
+   git clone https://github.com/Cognitive-systems-and-technologies/pythonProject
+
+   Также, Вы можете сделать данное действие, без использования Git. Для этого нажмите на кнопку "Code", а затем в 
+   выпадающем меню нажмите Download ZIP. После этого распакуйте содержимое архива в нужную папку.
+5. Create and activate a virtual environment:
 
    For Unix/Linux:
    python3 -m venv env
