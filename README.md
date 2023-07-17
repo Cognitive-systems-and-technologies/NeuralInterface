@@ -8,61 +8,86 @@
 
 Данный проект создан для управления агентами и их данными, отображения актуальной информации об обучении агентов.
 
-## Установка
+## Подготовка к установке
 1. Установите python с версией не менее 3.9. 
 
    Ссылка: https://www.python.org/downloads/
+
+   Обязательно, установите в галочку в пункте "Add python.exe to path"
+   Также, установите python для всех пользователей Windows.
 2. Установите Git.
    
    Ссылка: https://git-scm.com/downloads
 
-3. Откройте командную строку и пропишите путь к папке, в которой будет запускаться проект, используя команду: 
-   
-   cd C:\Project
+## Автоматическая установка и запуск на ОС Windows.
 
-   Замените C:\Project на необходимую Вам дерикторию. 
-4. Пропишите команду, используя командную строку:
+1. Скопируйте два файла AutoStart.bat и AutoInstall.bat из папки auto_installation в любое удобное Вам место
+
+2. Запустите файл AutoInstall.bat
+
+   Файл создаст директорию "C:\Projects\NeuralAlgorithmsInterface" на Вашем компьютере и установит в неё проект, а также установит папку виртуальным окружением.
+
+3. Запустите файл AutoStart.bat
+
+   Файл активирует виртуальное окружение и откроет браузер со страницей сайта, после чего запустит сервер.
+
+## Ручная установка и запуск
+
+1. Откройте командную строку и пропишите путь к папке, в которой будет запускаться проект, используя команду: 
+   
+   cd C:\Projects\NeuralAlgorithmsInterface
+
+   Замените C:\Projects\NeuralAlgorithmsInterface на необходимую Вам дерикторию. 
+
+2. Создайте виртуальное окружение с помощью команды:
+   
+   python -m venv venv
+   
+3. Активируйте виртуальное окружение с помощью команды: 
+   
+   .\venv\Scripts\activate
+
+4. Замените путь к папке с помощью команды:
+
+   C:\Projects\NeuralAlgorithmsInterface\pythonProject
+
+5. Загрузите данные из репозитория с помощью команды:
    
    git clone https://github.com/Cognitive-systems-and-technologies/pythonProject
 
+   Git попросит Вас выполнить авторизацию для данного действия.
+   
    Также, Вы можете сделать данное действие, без использования Git. Для этого нажмите на кнопку "Code", а затем в 
    выпадающем меню нажмите Download ZIP. После этого распакуйте содержимое архива в нужную папку.
-5. Create and activate a virtual environment:
 
-   For Unix/Linux:
-   python3 -m venv env
-   source env/bin/activate  
-
-   For Windows:
-   python -m venv env
-   .\env\Scripts\activate
-
-
-3. Install the required dependencies:
+6. Установите зависимости с помощью команды:
 
    pip install -r requirements.txt
 
-## Usage
+7. Запустите проект с помощью команды:
+   
+   python manage.py runserver
 
-1. Prepare the training data:
+Для  запука проекта вручную, необходимо выполнить пункты 1, 3, 4, 7.
 
-   - Create labeled labyrinth maps in the desired format. Each map should have a corresponding solution indicating the optimal path from the starting point to the exit.
-   - Save the labeled maps in a suitable format (e.g., CSV, JSON).
+## Решение возможных ошибок при установке
+1. Ошибка:
 
-2. Train the neural network:
+   Невозможно загрузить файл D:\...\python\1_PyCharm\django\djsite\venv\Scripts\Activate.ps1, так 
+   как выполнение сценариев отключено в этой системе. 
 
-   - Run the training script, specifying the path to the labeled labyrinth maps.
-   - The neural network will be trained to learn the optimal path-finding strategy.
+   Запустите командную строку от имени администратора и введите "powershel" 
+   
+   Затем введите "Set-ExecutionPolicy RemoteSigned"
 
-3. Test the neural network on new labyrinths:
+2. Если при установке виртуального окружения происходят ошибки, необходимо проверить правильность установки Python. Для того, чтобы понять месторасположение Python, можно воспользоваться командой:
 
-   - Use the trained neural network to find a path out of a new labyrinth by providing the labyrinth map as input.
-   - The neural network will predict the optimal path to navigate the labyrinth.
+where python
 
-## Contributing
+## Использование
 
-Contributions to this project are welcome. If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+В самом сайте на странице "Информация о проекте" есть подробная инструкция по использованию
 
-## License
+## Лицензия
 
-This project is licensed under the [MIT License](LICENSE).
+Этот проект находится под лицензией [MIT License](LICENSE).
