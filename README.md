@@ -46,13 +46,13 @@
 
 6. Перейдите в папку проекта с помощью команды:
    
-  cd C:\Projects\NeuralAlgorithmsInterface\pythonProject
+   cd C:\Projects\NeuralAlgorithmsInterface\pythonProject
 
-8. Установите зависимости с помощью команды:
+7. Установите зависимости с помощью команды:
 
    pip install -r requirements.txt
 
-9. Запустите проект с помощью команды:
+8. Запустите проект с помощью команды:
    
    python manage.py runserver
 
@@ -73,8 +73,6 @@
    where python
 
    Также, необходимо проверить была ли поставлена галочка в пункте "Add python.exe to path" при установке Python
-
-4. После использования команды "python -m venv venv" ничего не происходит
 
 ## Использование
 
