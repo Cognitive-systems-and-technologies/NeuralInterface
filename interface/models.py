@@ -11,20 +11,21 @@ from django.db import models
 # Таблицы базы данных
 # Группы агентов
 class AgentGroups(models.Model):
-    agent_group_name = models.CharField(max_length=100)
-    agent_group_priority = models.IntegerField(blank=True, null=True)
-    datetime_create = models.DateTimeField(blank=True, null=True)
-    datetime_change = models.DateTimeField(blank=True, null=True)
-    agent_group_description = models.CharField(max_length=250, blank=True, null=True)
+    agent_group_name = models.CharField(max_length=100)  # Название группы агентов
+    agent_group_priority = models.IntegerField(blank=True, null=True)  # Приоритет группы агентов
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    datetime_change = models.DateTimeField(blank=True, null=True)  # Дата и время последнего изменения
+    agent_group_description = models.CharField(max_length=250, blank=True, null=True)  # Описание группы агентов
 
     class Meta:
         managed = False
         db_table = 't_agent_groups'
 
+
 # Типы агентов
 class AgentTypes(models.Model):
-    agent_type = models.CharField(max_length=100)
-    agent_type_description = models.CharField(max_length=250, blank=True, null=True)
+    agent_type = models.CharField(max_length=100)  # Тип агента
+    agent_type_description = models.CharField(max_length=250, blank=True, null=True)  # Описание типа агента
 
     class Meta:
         managed = False
@@ -33,16 +34,16 @@ class AgentTypes(models.Model):
 
 # Агенты
 class Agents(models.Model):
-    agent_name = models.CharField(max_length=250, blank=True, null=True)
-    agent_group = models.ForeignKey(AgentGroups, models.DO_NOTHING, blank=True, null=True)
-    agent_status = models.IntegerField(blank=True, null=True)
-    agent_description = models.CharField(max_length=500, blank=True, null=True)
-    datetime_create = models.DateTimeField(blank=True, null=True)
-    datetime_change = models.DateTimeField(blank=True, null=True)
-    agent_type = models.ForeignKey(AgentTypes, models.DO_NOTHING, blank=True, null=True)
-    agent_mac_address = models.CharField(max_length=250, blank=True, null=True)
-    agent_ip_address = models.CharField(max_length=250, blank=True, null=True)
-    agent_port = models.CharField(max_length=250, blank=True, null=True)
+    agent_name = models.CharField(max_length=250, blank=True, null=True)  # Имя агента
+    agent_group = models.ForeignKey(AgentGroups, models.DO_NOTHING, blank=True, null=True)  # Группа агента
+    agent_status = models.IntegerField(blank=True, null=True)  # Статус агента
+    agent_description = models.CharField(max_length=500, blank=True, null=True)  # Описание агента
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    datetime_change = models.DateTimeField(blank=True, null=True)  # Дата и время последнего изменения
+    agent_type = models.ForeignKey(AgentTypes, models.DO_NOTHING, blank=True, null=True)  # Тип агента
+    agent_mac_address = models.CharField(max_length=250, blank=True, null=True)  # MAC-адрес агента
+    agent_ip_address = models.CharField(max_length=250, blank=True, null=True)  # IP-адрес агента
+    agent_port = models.CharField(max_length=250, blank=True, null=True)  # Порт агента
 
     class Meta:
         managed = False
@@ -51,13 +52,13 @@ class Agents(models.Model):
 
 # Файлы агентов
 class AgentFiles(models.Model):
-    agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
-    file_name = models.CharField(max_length=250, blank=True, null=True)
-    file_type = models.CharField(max_length=250, blank=True, null=True)
-    file_path = models.CharField(max_length=250, blank=True, null=True)
-    file_description = models.CharField(max_length=250, blank=True, null=True)
-    datetime_create = models.DateTimeField(blank=True, null=True)
-    datetime_change = models.DateTimeField(blank=True, null=True)
+    agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)  # Агент, связанный с файлом
+    file_name = models.CharField(max_length=250, blank=True, null=True)  # Имя файла
+    file_type = models.CharField(max_length=250, blank=True, null=True)  # Тип файла
+    file_path = models.CharField(max_length=250, blank=True, null=True)  # Путь к файлу
+    file_description = models.CharField(max_length=250, blank=True, null=True)  # Описание файла
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    datetime_change = models.DateTimeField(blank=True, null=True)  # Дата и время последнего изменения
 
     class Meta:
         managed = False
@@ -66,10 +67,10 @@ class AgentFiles(models.Model):
 
 # Состояние нейросети агентов
 class AgentNeuralNetworkState(models.Model):
-    agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
-    neural_network_state = models.CharField(max_length=1000000, blank=True, null=True)
-    neural_network_state_description = models.CharField(max_length=250, blank=True, null=True)
-    create_datetime = models.DateTimeField(blank=True, null=True)
+    agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)  # Агент, связанный с состоянием нейросети
+    neural_network_state = models.CharField(max_length=1000000, blank=True, null=True)  # Состояние нейросети агента
+    neural_network_state_description = models.CharField(max_length=250, blank=True, null=True)  # Описание состояния нейросети
+    create_datetime = models.DateTimeField(blank=True, null=True)  # Дата и время создания
 
     class Meta:
         managed = False
@@ -78,11 +79,11 @@ class AgentNeuralNetworkState(models.Model):
 
 # Алгоритмы
 class NeuralAlgorithms(models.Model):
-    algorithm_name = models.CharField(max_length=250, blank=True, null=True)
-    algorithm_code_name = models.CharField(max_length=250, blank=True, null=True)
-    algorithm_description = models.CharField(max_length=250, blank=True, null=True)
-    datetime_create = models.DateTimeField(blank=True, null=True)
-    datetime_change = models.DateTimeField(blank=True, null=True)
+    algorithm_name = models.CharField(max_length=250, blank=True, null=True)  # Название алгоритма
+    algorithm_code_name = models.CharField(max_length=250, blank=True, null=True)  # Кодовое имя алгоритма
+    algorithm_description = models.CharField(max_length=250, blank=True, null=True)  # Описание алгоритма
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    datetime_change = models.DateTimeField(blank=True, null=True)  # Дата и время последнего изменения
 
     class Meta:
         managed = False
@@ -91,12 +92,12 @@ class NeuralAlgorithms(models.Model):
 
 # Ошибки агентов
 class AgentErrors(models.Model):
-    agent_step = models.IntegerField(blank=True, null=True)
-    agent_error_value = models.FloatField(blank=True, null=True)
-    datetime_create = models.DateTimeField(blank=True, null=True)
-    agent_error_info = models.CharField(max_length=250, blank=True, null=True)
-    agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)
-    algorithm = models.ForeignKey(NeuralAlgorithms, models.DO_NOTHING, blank=True, null=True)
+    agent_step = models.IntegerField(blank=True, null=True)  # Шаг агента
+    agent_error_value = models.FloatField(blank=True, null=True)  # Значение ошибки агента
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    agent_error_info = models.CharField(max_length=250, blank=True, null=True)  # Информация об ошибке агента
+    agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)  # Агент, связанный с ошибкой
+    algorithm = models.ForeignKey(NeuralAlgorithms, models.DO_NOTHING, blank=True, null=True)  # Алгоритм, связанный с ошибкой
 
     class Meta:
         managed = False
@@ -106,21 +107,21 @@ class AgentErrors(models.Model):
 # Представления базы данных
 # Представление агентов
 class AgentsView(models.Model):
-    id = models.IntegerField(primary_key=True)
-    agent_name = models.CharField(max_length=250, blank=True, null=True)
-    agent_group_name = models.CharField(max_length=100)
-    agent_group_id = models.IntegerField()
-    agent_status = models.CharField(max_length=100)
-    agent_status_id = models.IntegerField()
-    agent_description = models.CharField(max_length=250, blank=True, null=True)
-    datetime_create = models.DateTimeField(blank=True, null=True)
-    datetime_change = models.DateTimeField(blank=True, null=True)
-    agent_type = models.CharField(max_length=100)
-    agent_type_id = models.IntegerField()
-    agent_mac_address = models.CharField(max_length=250, blank=True, null=True)
-    agent_ip_address = models.CharField(max_length=250, blank=True, null=True)
-    agent_ip_address_port = models.CharField(max_length=250, blank=True, null=True)
-    agent_port = models.CharField(max_length=250, blank=True, null=True)
+    id = models.IntegerField(primary_key=True)  # Идентификатор агента
+    agent_name = models.CharField(max_length=250, blank=True, null=True)  # Имя агента
+    agent_group_name = models.CharField(max_length=100)  # Название группы агента
+    agent_group_id = models.IntegerField()  # Идентификатор группы агента
+    agent_status = models.CharField(max_length=100)  # Статус агента
+    agent_status_id = models.IntegerField()  # Идентификатор статуса агента
+    agent_description = models.CharField(max_length=250, blank=True, null=True)  # Описание агента
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    datetime_change = models.DateTimeField(blank=True, null=True)  # Дата и время последнего изменения
+    agent_type = models.CharField(max_length=100)  # Тип агента
+    agent_type_id = models.IntegerField()  # Идентификатор типа агента
+    agent_mac_address = models.CharField(max_length=250, blank=True, null=True)  # MAC-адрес агента
+    agent_ip_address = models.CharField(max_length=250, blank=True, null=True)  # IP-адрес агента
+    agent_ip_address_port = models.CharField(max_length=250, blank=True, null=True)  # IP-адрес и порт агента
+    agent_port = models.CharField(max_length=250, blank=True, null=True)  # Порт агента
 
     class Meta:
         managed = False
@@ -129,17 +130,18 @@ class AgentsView(models.Model):
 
 # Представление ошибок агентов
 class AgentErrorsView(models.Model):
-    id = models.IntegerField(primary_key=True)
-    agent_step = models.IntegerField(blank=True, null=True)
-    agent_error_value = models.FloatField(blank=True, null=True)
-    datetime_create = models.DateTimeField(blank=True, null=True)
-    agent_error_info = models.CharField(max_length=250, blank=True, null=True)
-    agent_name = models.CharField(max_length=250, blank=True, null=True)
-    agent_id = models.IntegerField(blank=True, null=True)
-    algorithm_id = models.IntegerField(blank=True, null=True)
-    algorithm_name = models.CharField(max_length=250, blank=True, null=True)
-    algorithm_code_name = models.CharField(max_length=250, blank=True, null=True)
-    algorithm_description = models.CharField(max_length=250, blank=True, null=True)
+    id = models.IntegerField(primary_key=True)  # Идентификатор ошибки агента
+    agent_step = models.IntegerField(blank=True, null=True)  # Шаг агента
+    agent_error_value = models.FloatField(blank=True, null=True)  # Значение ошибки агента
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    agent_error_info = models.CharField(max_length=250, blank=True, null=True)  # Информация об ошибке агента
+    agent_name = models.CharField(max_length=250, blank=True, null=True)  # Имя агента
+    agent_id = models.IntegerField(blank=True, null=True)  # Идентификатор агента
+    algorithm_id = models.IntegerField(blank=True, null=True)  # Идентификатор алгоритма
+    algorithm_name = models.CharField(max_length=250, blank=True, null=True)  # Название алгоритма
+    algorithm_code_name = models.CharField(max_length=250, blank=True, null=True)  # Кодовое имя алгоритма
+    algorithm_description = models.CharField(max_length=250, blank=True, null=True)  # Описание алгоритма
+
 
     class Meta:
         managed = False
@@ -148,14 +150,14 @@ class AgentErrorsView(models.Model):
 
 # Представление файлов агентов
 class AgentFilesView(models.Model):
-    id = models.IntegerField(primary_key=True)
-    agent_name = models.CharField(max_length=100)
-    file_name = models.CharField(max_length=250, blank=True, null=True)
-    file_type = models.CharField(max_length=250, blank=True, null=True)
-    file_path = models.CharField(max_length=250, blank=True, null=True)
-    file_description = models.CharField(max_length=250, blank=True, null=True)
-    datetime_create = models.DateTimeField(blank=True, null=True)
-    datetime_change = models.DateTimeField(blank=True, null=True)
+    id = models.IntegerField(primary_key=True)  # Идентификатор файла
+    agent_name = models.CharField(max_length=100)  # Имя агента
+    file_name = models.CharField(max_length=250, blank=True, null=True)  # Имя файла
+    file_type = models.CharField(max_length=250, blank=True, null=True)  # Тип файла
+    file_path = models.CharField(max_length=250, blank=True, null=True)  # Путь к файлу
+    file_description = models.CharField(max_length=250, blank=True, null=True)  # Описание файла
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    datetime_change = models.DateTimeField(blank=True, null=True)  # Дата и время последнего изменения
 
     class Meta:
         managed = False
@@ -164,11 +166,11 @@ class AgentFilesView(models.Model):
 
 # Представление групп агентов
 class AgentGroupsView(models.Model):
-    agent_group_name = models.CharField(max_length=100)
-    agent_group_priority = models.IntegerField()
-    datetime_create = models.DateTimeField()
-    datetime_change = models.DateTimeField()
-    agent_group_description = models.CharField(max_length=250, blank=True, null=True)
+    agent_group_name = models.CharField(max_length=100)  # Название группы агентов
+    agent_group_priority = models.IntegerField()  # Приоритет группы агентов
+    datetime_create = models.DateTimeField()  # Дата и время создания
+    datetime_change = models.DateTimeField()  # Дата и время последнего изменения
+    agent_group_description = models.CharField(max_length=250, blank=True, null=True)  # Описание группы агентов
 
     class Meta:
         managed = False
@@ -177,8 +179,8 @@ class AgentGroupsView(models.Model):
 
 # Представление типов агентов
 class AgentTypesView(models.Model):
-    agent_type = models.CharField(max_length=100)
-    agent_type_description = models.CharField(max_length=250, blank=True, null=True)
+    agent_type = models.CharField(max_length=100)  # Тип агента
+    agent_type_description = models.CharField(max_length=250, blank=True, null=True)  # Описание типа агента
 
     class Meta:
         managed = False
@@ -187,22 +189,22 @@ class AgentTypesView(models.Model):
 
 # Представления нейросетевого состояния агентов
 class AgentNeuralNetworkStateView(models.Model):
-    id = models.IntegerField(primary_key=True)
-    count_neural_network_state = models.IntegerField()
-    neural_network_state_description = models.CharField(max_length=250, blank=True, null=True)
-    datetime_create = models.DateTimeField(blank=True, null=True)
-    datetime_change = models.DateTimeField(blank=True, null=True)
-    agent_name = models.CharField(max_length=250, blank=True, null=True)
-    agent_group_name = models.CharField(max_length=100)
-    agent_group_id = models.IntegerField()
-    agent_status = models.CharField(max_length=100)
-    agent_status_id = models.IntegerField()
-    agent_description = models.CharField(max_length=250, blank=True, null=True)
-    agent_type = models.CharField(max_length=100)
-    agent_type_id = models.IntegerField()
-    agent_mac_address = models.CharField(max_length=250, blank=True, null=True)
-    agent_ip_address = models.CharField(max_length=250, blank=True, null=True)
-    agent_port = models.CharField(max_length=250, blank=True, null=True)
+    id = models.IntegerField(primary_key=True)  # Идентификатор состояния нейросети
+    count_neural_network_state = models.IntegerField()  # Количество состояний нейросети
+    neural_network_state_description = models.CharField(max_length=250, blank=True, null=True)  # Описание состояния нейросети
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    datetime_change = models.DateTimeField(blank=True, null=True)  # Дата и время последнего изменения
+    agent_name = models.CharField(max_length=250, blank=True, null=True)  # Имя агента
+    agent_group_name = models.CharField(max_length=100)  # Название группы агента
+    agent_group_id = models.IntegerField()  # Идентификатор группы агента
+    agent_status = models.CharField(max_length=100)  # Статус агента
+    agent_status_id = models.IntegerField()  # Идентификатор статуса агента
+    agent_description = models.CharField(max_length=250, blank=True, null=True)  # Описание агента
+    agent_type = models.CharField(max_length=100)  # Тип агента
+    agent_type_id = models.IntegerField()  # Идентификатор типа агента
+    agent_mac_address = models.CharField(max_length=250, blank=True, null=True)  # MAC-адрес агента
+    agent_ip_address = models.CharField(max_length=250, blank=True, null=True)  # IP-адрес агента
+    agent_port = models.CharField(max_length=250, blank=True, null=True)  # Порт агента
 
     class Meta:
         managed = False

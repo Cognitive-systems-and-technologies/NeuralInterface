@@ -1,45 +1,59 @@
 graphTableClickListeners()
 agentCommandClickListeners()
 var agentIDGraph = parseInt(document.querySelector('.clickable-row td:first-child').textContent)
-// Инициализируем график
+// Получаем ID агента для отображения графика.
+// Находим элемент таблицы с классом "clickable-row" и первым дочерним элементом ячейку td.
+// Извлекаем текстовое содержимое ячейки и преобразуем его в целое число с помощью parseInt().
+
+// Инициализируем контейнер для графика
 var chartContainer = document.getElementById('chart');
 var chart = echarts.init(chartContainer);
 
 window.addEventListener('DOMContentLoaded', (event) => {
-    // Find the first row in the table
+    // Находим первую строку в таблице
     const firstRow = document.querySelector('table tbody tr');
 
-    // Simulate a click event on the first row
+    // Симулируем событие клика на первой строке
     if (firstRow) {
         firstRow.click();
     }
 });
+// При загрузке страницы добавляем обработчик события для выполнения кода после полной загрузки контента (DOMContentLoaded).
+// Находим первую строку в таблице с помощью селектора 'table tbody tr'.
+// Если первая строка найдена, симулируем событие клика на этой строке.
+
 
 function graphDraw(agentIDGraph) {
+    // Запрос к API для получения данных графика
     fetch(`/api/graphData/?agent_id=${agentIDGraph}`)
         .then(response => response.json())
         .then(data => {
+            // Проверка наличия данных
             if (data.length > 0) {
-                console.log(data)
-                /* Формируем данные для оси X */
+                console.log(data);
+
+                /* Формирование данных для оси X */
                 const agentStepValues = data.map(obj => obj.agent_step);
                 const uniqueAgentStepValues = [...new Set(agentStepValues)];
                 const xAxisData = uniqueAgentStepValues.sort((a, b) => a - b);
-                console.log(xAxisData)
-                /* Формируем данные для графика */
+                console.log(xAxisData);
+
+                /* Формирование данных для графика */
                 const errorValuesByAlgorithm = {};
                 data.forEach(obj => {
                     const algorithmCodeName = obj.algorithm_code_name;
                     const errorValue = obj.agent_error_value;
 
+                    // Группировка значений ошибки по алгоритму
                     if (!errorValuesByAlgorithm.hasOwnProperty(algorithmCodeName)) {
                         errorValuesByAlgorithm[algorithmCodeName] = [];
                     }
-
                     errorValuesByAlgorithm[algorithmCodeName].push(errorValue);
                 });
+
                 const seriesData = [];
 
+                // Формирование данных серий для графика
                 for (const algorithmCodeName in errorValuesByAlgorithm) {
                     const errorValues = errorValuesByAlgorithm[algorithmCodeName];
 
@@ -49,8 +63,10 @@ function graphDraw(agentIDGraph) {
                         type: 'line'
                     });
                 }
+
                 console.log(seriesData);
-                // Устанавливаем опции графика и загружаем данные
+
+                // Установка опций графика и загрузка данных
                 chart.setOption({
                     xAxis: [
                         {
@@ -72,7 +88,7 @@ function graphDraw(agentIDGraph) {
                     series: seriesData,
                     tooltip: {
                         trigger: 'axis',
-                        axisPointer: {type: 'cross'}
+                        axisPointer: { type: 'cross' }
                     },
                     toolbox: {
                         show: true,
@@ -101,16 +117,18 @@ function graphDraw(agentIDGraph) {
                             fontSize: 28
                         }
                     }]
-                }, true)
+                }, true);
+
+                // Обновление статуса в футере
                 const footerStatus = document.getElementById('footerStatus');
                 if (footerStatus) {
                     footerStatus.textContent = 'Данные успешно загружены';
-                    footerStatus.classList.remove('text-success')
-                    footerStatus.classList.remove('text-danger')
-                    footerStatus.classList.add('text-success')
+                    footerStatus.classList.remove('text-success');
+                    footerStatus.classList.remove('text-danger');
+                    footerStatus.classList.add('text-success');
                 }
             } else {
-                // Show "No Data" text instead of the graph
+                // Отображение сообщения "Нет данных" вместо графика
                 chart.setOption({
                     graphic: [{
                         type: 'text',
@@ -123,12 +141,14 @@ function graphDraw(agentIDGraph) {
                         }
                     }],
                 }, true);
+
+                // Обновление статуса в футере
                 const footerStatus = document.getElementById('footerStatus');
                 if (footerStatus) {
                     footerStatus.textContent = 'Нет данных в базе данных';
-                    footerStatus.classList.remove('text-success')
-                    footerStatus.classList.remove('text-danger')
-                    footerStatus.classList.add('text-danger')
+                    footerStatus.classList.remove('text-success');
+                    footerStatus.classList.remove('text-danger');
+                    footerStatus.classList.add('text-danger');
                 }
             }
         })
@@ -141,67 +161,80 @@ chart.on('restore', function (params) {
     graphDraw(agentIDGraph);
 });
 
+// Функция обработки событий нажатия на строку таблицы
 function graphTableClickListeners() {
-    // Add click event listeners to each clickable row
+    // Добавление обработчиков событий клика к каждой кликабельной строке
     var rows = document.getElementsByClassName('clickable-row');
     for (var i = 0; i < rows.length; i++) {
         rows[i].addEventListener('click', handleRowClick);
     }
 
-    // Function to handle click on a row
+    // Функция для обработки клика по строке
     function handleRowClick(event) {
-        // Get the selected row
+        // Получение выбранной строки
         const row = event.currentTarget;
 
-        // Remove table-active class from all rows
+        // Удаление класса "table-active" у всех строк
         const table = row.closest('table');
         let rows = table.getElementsByClassName('clickable-row');
         for (let i = 0; i < rows.length; i++) {
             rows[i].classList.remove('table-active');
         }
 
-        // Toggle the "table-active" class on the clicked row
+        // Переключение класса "table-active" для кликнутой строки
         row.classList.toggle('table-active');
 
-        // Get the data from each cell in the row
+        // Получение данных из каждой ячейки строки
         const rowData = Array.from(row.cells).map(cell => cell.textContent.trim());
 
-        // Print the captured data to the console (you can modify this part as needed)
+        // Вывод собранных данных в консоль (эту часть можно изменить по необходимости)
         const agentIDGraph = rowData[0];
 
         const agentName = rowData[2];
-        console.log()
+        console.log(agentName);
+
         const headerStatus = document.getElementById('headerStatus');
         if (headerStatus) {
             headerStatus.value = agentIDGraph;
         }
-        // Call your graphDraw function with the agent ID
+
+        // Вызов функции graphDraw с использованием идентификатора агента
         graphDraw(agentIDGraph);
     }
 }
 
-
+// Функция обработки событий нажатия кнопок управления агентом
 function agentCommandClickListeners() {
-    // Add click event listeners to each clickable row
+    // Добавление обработчиков событий клика к каждой кнопке
     const agentCommandButtons = document.querySelectorAll('.agentCommand');
     agentCommandButtons.forEach((button) => {
         button.addEventListener('click', () => {
+            // Получение команды агента из значения кнопки
             const agentCommand = button.value;
-            console.log(agentCommand); // Output the value of the clicked button
-            SendRequestToAgent(agentCommand)
+            console.log(agentCommand); // Вывод значения кликнутой кнопки в консоль
+            SendRequestToAgent(agentCommand);
         });
     });
 }
 
+// Функция отправки запроса агенту
 function SendRequestToAgent(agentCommand) {
+    // Получение идентификатора агента из элемента с id "headerStatus"
     const agentId = document.getElementById('headerStatus').value;
+
+    // Формирование данных запроса
     const requestData = {
         agent_id: agentId,
         agent_command: agentCommand,
         t: 'command'
     };
-    console.log(JSON.stringify(requestData))
+
+    console.log(JSON.stringify(requestData));
+
+    // Получение CSRF-токена
     const csrftoken = getCookie('csrftoken');
+
+    // Отправка POST-запроса на сервер
     fetch(`/api/SendRequestToAgent`, {
         method: 'POST',
         headers: {
@@ -210,34 +243,37 @@ function SendRequestToAgent(agentCommand) {
         },
         body: JSON.stringify(requestData)
     }).then(function (response) {
-        // Check if the response was successful (status 200)
+        // Проверка успешности ответа (статус 200)
         if (response.ok) {
             return response.json();
         } else {
             throw new Error('Network response was not OK.');
         }
     }).then(data => {
-        console.log(data)
+        console.log(data);
         if (data !== undefined && data.error) {
             console.error(data.error);
-            // Handle the error message here (e.g., display it on the UI)
+            // Обработка сообщения об ошибке (например, отображение на пользовательском интерфейсе)
         } else if (data !== undefined) {
-            const errorMessageCheck = data.substring(0, 6)
+            // Проверка наличия сообщения об ошибке
+            const errorMessageCheck = data.substring(0, 6);
             if (errorMessageCheck === 'Ошибка') {
+                // Обновление статуса внизу страницы при ошибке
                 const footerStatus = document.getElementById('footerStatus');
                 if (footerStatus) {
                     footerStatus.textContent = data;
-                    footerStatus.classList.remove('text-success')
-                    footerStatus.classList.remove('text-danger')
-                    footerStatus.classList.add('text-danger')
+                    footerStatus.classList.remove('text-success');
+                    footerStatus.classList.remove('text-danger');
+                    footerStatus.classList.add('text-danger');
                 }
             } else if (errorMessageCheck !== 'Ошибка') {
+                // Обновление статуса внизу страницы при успешном выполнении
                 const footerStatus = document.getElementById('footerStatus');
                 if (footerStatus) {
                     footerStatus.textContent = data;
-                    footerStatus.classList.remove('text-success')
-                    footerStatus.classList.remove('text-danger')
-                    footerStatus.classList.add('text-success')
+                    footerStatus.classList.remove('text-success');
+                    footerStatus.classList.remove('text-danger');
+                    footerStatus.classList.add('text-success');
                 }
             }
         }
@@ -246,14 +282,15 @@ function SendRequestToAgent(agentCommand) {
     });
 }
 
-function getCookie(name) {
-    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    return cookieValue ? cookieValue.pop() : '';
-}
-
+// Функция удаления данных графика для определенного агента
 function deleteAgentErrors() {
+    // Получение CSRF-токена
     const tokenizers = getCookie('csrftoken');
+
+    // Получение идентификатора агента из элемента с id "headerStatus"
     const agentIDGraph = document.getElementById('headerStatus').value;
+
+    // Отправка DELETE-запроса на сервер для удаления данных об ошибках агента
     fetch(`api/deleteAgentErrorsData/${agentIDGraph}/`, {
         method: 'DELETE',
         headers: {
@@ -262,13 +299,13 @@ function deleteAgentErrors() {
         }
     }).then(response => {
         if (response.ok) {
-            // Check if the status code is 204 (No Content)
+            // Проверка статуса ответа (204 - No Content)
             if (response.status === 204) {
                 console.log("Agent deleted");
-                // Do any necessary UI updates or item removal
+                // Выполнение необходимых обновлений пользовательского интерфейса или удаление элементов
             } else {
-                // Handle other success status codes if needed
-                // Extract response data if available
+                // Обработка других успешных статусов кодов, если необходимо
+                // Извлечение данных ответа, если доступно
                 return response.json();
             }
         } else {
@@ -278,23 +315,35 @@ function deleteAgentErrors() {
         .then(data => {
             if (data !== undefined && data.error) {
                 console.error(data.error);
-                // Handle the error message here (e.g., display it on the UI)
+                // Обработка сообщения об ошибке (например, отображение на пользовательском интерфейсе)
             } else if (data !== undefined) {
+                // Проверка сообщения об успешном удалении данных
                 if (data == 'Данные успешно удалены') {
+                    // Перерисовка графика после удаления данных об ошибках агента
                     graphDraw(agentIDGraph);
                 } else if (data != 'Группа успешно удалена') {
+                    // Обновление статуса внизу страницы при ошибке
                     const footerStatus = document.getElementById('footerStatus');
                     if (footerStatus) {
                         footerStatus.textContent = data;
-                        footerStatus.classList.remove('text-success')
-                        footerStatus.classList.remove('text-danger')
-                        footerStatus.classList.add('text-danger')
+                        footerStatus.classList.remove('text-success');
+                        footerStatus.classList.remove('text-danger');
+                        footerStatus.classList.add('text-danger');
                     }
                 }
-                // Handle response data if available
+                // Обработка данных ответа, если доступны
             }
         })
         .catch(error => {
             console.error('An error occurred:', error);
         });
+}
+
+
+function getCookie(name) {
+    // Ищем значение cookie по имени с помощью регулярного выражения
+    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    // Если найдено значение cookie, возвращаем его
+    // Используем метод pop(), чтобы получить последний элемент массива с найденным значением cookie
+    return cookieValue ? cookieValue.pop() : '';
 }

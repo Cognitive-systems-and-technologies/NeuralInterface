@@ -31,7 +31,7 @@ urlpatterns = [
     path('api/addAgentData', AgentAddData.as_view()),
     path('api/editAgentData/<int:pk>/', AgentEditData.as_view(), name='agent-edit'),
     path('api/deleteAgentData/<int:pk>/', AgentDeleteData.as_view(), name='agent-delete'),
-    path('api/addGroupData', GroupAddData.as_view()),
+    path('api/addGroupData', GroupAddData.as_view(), name='group-add'),
     path('api/editGroupData/<int:pk>/', GroupEditData.as_view(), name='group-edit'),
     path('api/deleteGroupData/<int:pk>/', GroupDeleteData.as_view(), name='group-delete'),
     path('monitor/api/deleteAgentErrorsData/<int:agent_id>/', AgentErrorsDeleteData.as_view(), name='agents-errors-delete'),
