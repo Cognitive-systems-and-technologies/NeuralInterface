@@ -1,17 +1,437 @@
 {% extends 'interface/base.html' %}
-
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/info.css' %}">
 <span class="fs-4 fw-bold">Информация</span>
 <hr>
+<ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+                type="button" role="tab" aria-controls="pills-home" aria-selected="true">Панель управления
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-monitor-tab" data-bs-toggle="pill" data-bs-target="#pills-monitor"
+                type="button" role="tab" aria-controls="pills-monitor" aria-selected="false">Мониторинг
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-admin-tab" data-bs-toggle="pill" data-bs-target="#pills-admin" type="button"
+                role="tab" aria-controls="pills-admin" aria-selected="false">Панель администратора
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-api-tab" data-bs-toggle="pill" data-bs-target="#pills-api" type="button"
+                role="tab" aria-controls="pills-api" aria-selected="false">API
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-info-tab" data-bs-toggle="pill" data-bs-target="#pills-info" type="button"
+                role="tab" aria-controls="pills-info" aria-selected="false">Информация о проекте
+        </button>
+    </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <div class="container">
+            <h5>Общая информация</h5>
+            <p>Позволяет работать с данными из базы данных. Полностью управлять данными можно только для таблиц с
+                агентами и группами агентов. Позволяется создавать, изменять и удалять записи. При попытке удалить
+                запись, которая связана с другой записью в другой таблицы посредством внешнего ключа, система выдаст
+                предупреждение о том, что сделать это нельзя и необходимо сначала удалить все данные таким образом,
+                чтобы у БД сохранялась структура третьей нормальной формы. Осуществляется всё посредством кнопок.
+                При создании и изменении открывается модальное окно для заполнения или изменения данных соответственно.
+                Таблица типов агентов статичная и содержит значения по умолчанию. Остальные таблицы, если есть
+                необходимость, нужно заполнять через административную панель сайта, которая позволяет полностью изменять
+                данные.</p>
+            <h5>Работа с агентами</h5>
+            <video width="1000" height="490" preload="auto" autoplay="autoplay" controls>
+                <source src="{% static 'video/info/AgentUse.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="alert alert-warning">
+                <a><strong>Важно!</strong> Для корректной работы веб-приложения, необходимо, чтобы MAC адреса и IP
+                    адреса у агентов были уникальные.
+                    Данные в таблицах связаны внешними ключами. Вы не сможете удалить связанные данные. Например, Вы не
+                    сможете удалить агента, если есть данные в таблице с файлами для этого агента или в какой-нибудь
+                    другой таблице.
+                </a>
+            </div>
+            <h5>Работа с группами</h5>
+            <video width="1000" height="490" preload="auto" autoplay="autoplay" controls>
+                <source src="{% static 'video/info/GroupUse.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="alert alert-warning">
+                <a><strong>Важно!</strong> На группы агентов действуют схожие ограничения, что и на самих агентов.
+                    Например, Вы не сможете удалить группу агентов, если к ней принадлежит хотя
+                    бы один агент.
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pills-monitor" role="tabpanel" aria-labelledby="pills-monitor-tab">
+        <div class="container">
+            <h5>Общая информация</h5>
+            <p>Выводит информацию об обучении агентов, а также позволяет управлять данными агентов.
+                По умолчанию, всегда выбирается первая запись из таблицы ошибок агентов. График отображает данные
+                обучения агентов. При выборе необходимого агента в таблице, график перерисовывается, исходя из значений
+                ошибок для определенного агента. Панель в правой нижней части экрана позволяет отправлять необходимые
+                команды агентам.</p>
+            <h5>Работа с графиком</h5>
+            <video width="1000" height="560" preload="auto" autoplay="autoplay" controls>
+                <source src="{% static 'video/info/GraphUse.mp4' %}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <p>Кнопки в правой нижней части страницы отвечают за прямое управление и взаимодействие с агентами. При
+                нажатии на кнопку отправляется запрос, который в зависимости от состояния агента отправляет определенный
+                ответ. Как показано на видео, сервер не может найти агента в локальной сети с таким адресом и присылает
+                ошибку, которая в полном виде отображается в нижней части страницы.</p>
+            <div class="alert alert-warning">
+                <a><strong>Важно!</strong> График не обновляется автоматически. Для обновления данных нажмите на кнопку
+                    обновления графика в верхней части экрана или на строчку с агентом в таблице</a>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pills-admin" role="tabpanel" aria-labelledby="pills-admin-tab">
+        <div class="container">
+            <div class="alert alert-success">
+                <strong>Логин: root |</strong><strong> Пароль: 1234</strong>
+            </div>
+            <h5>Общая информация</h5>
+            <p>Административная панель Django - это встроенный инструмент, предоставляемый Django для управления данными
+                вашего веб-приложения. Она обеспечивает удобный и мощный интерфейс для работы с моделями и данными в
+                вашей базе данных без необходимости создания собственного пользовательского интерфейса. Это мощный
+                инструмент, который значительно упрощает управление данными в вашем веб-приложении, и она поставляется с
+                Django "из коробки", что делает ее одним из популярных выборов для административного интерфейса.</p>
+            <h5>Вход в административную панель</h5>
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Зайдите на страницу административной панели</div>
+                        Откройте веб-браузер и введите адрес административной панели (обычно это
+                        <code>/admin</code>) в адресной
+                        строке сайта или нажмите в левом меню "Панель администратора"
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Авторизуйтесь</div>
+                        Вам будет предложено ввести учетные данные. Введите логин и пароль,
+                        указанные выше
+                    </div>
+                </li>
+            </ol>
+            <h5 class="mt-2 mb-2">Возможности панели администратора</h5>
+            <p><strong>Аутентификация и авторизация:</strong> Административная панель предоставляет механизмы
+                аутентификации для входа в систему. Пользователь должен ввести правильные учетные данные (логин и
+                пароль), чтобы получить доступ к административной панели. Кроме того, она поддерживает систему
+                авторизации, что позволяет управлять правами доступа пользователей, включая суперпользователя.</p>
 
+            <p><strong>Доступ к моделям приложения:</strong> Административная панель автоматически анализирует ваше
+                Django-приложение и создает интерфейс для работы с моделями, определенными в приложении. Она позволяет
+                вам просматривать все модели, доступные в вашем приложении, и взаимодействовать с ними.</p>
+
+            <p><strong>CRUD операции:</strong> CRUD - это аббревиатура, означающая "Create", "Read", "Update" и
+                "Delete". Административная панель позволяет выполнять все эти операции с данными вашей базы данных. Вы
+                можете создавать новые записи, просматривать их, обновлять значения полей и удалять записи.</p>
+
+            <p><strong>Фильтрация, поиск и сортировка:</strong> Административная панель предоставляет удобные средства
+                для фильтрации данных, поиска и сортировки записей. Это очень полезно, когда у вас есть большое
+                количество данных и вы хотите быстро найти нужные записи.</p>
+
+            <p><strong>Валидация данных:</strong> При создании или редактировании записей, административная панель
+                выполняет проверку валидности данных, чтобы убедиться, что введенные значения соответствуют определенным
+                правилам и ограничениям.</p>
+
+            <p><strong>Отображение связей:</strong> Если у ваших моделей есть взаимосвязи через внешние ключи или другие
+                отношения, административная панель отображает эти связи и позволяет легко перемещаться между связанными
+                записями.</p>
+
+            <p><strong>Настройка интерфейса:</strong> Вы можете настроить внешний вид и функциональность
+                административной панели, добавлять или скрывать поля, настраивать формы и управлять внешним видом
+                моделей.</p>
+
+            <div class="alert alert-warning">
+                <strong>Важно!</strong> С осторожностью удаляйте, изменяйте или добавляйте данные! Нарушив целостность
+                структуры базы данных может полечь за собой нестабильную работу всего приложения. Если же Вам всё же
+                нужно ка-то изменить структуру базы данных, добавить новые таблицы или изменить внешние ключи, то
+                рекомендуем пользоваться бесплатной программой <a href="https://dbeaver.io/">Dbeaver</a>.
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pills-api" role="tabpanel" aria-labelledby="pills-api-tab">
+        <div class="container mt-4">
+            <h5>Команды управления агентом</h5>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th class="col-4">Команда</th>
+                    <th class="col-8">Описание</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"command",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"forward"</code><br><code>}</code></pre>
+                    </td>
+                    <td>Движение вперед</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"command",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"backward"</code><br><code>}</code></pre>
+                    </td>
+                    <td>Движение назад</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"command",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"left"</code><br><code>}</code></pre>
+                    </td>
+                    <td>Движение налево</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"command",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"right"</code><br><code>}</code></pre>
+                    </td>
+                    <td>Движение направо</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"command",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"stop"</code><br><code>}</code></pre>
+                    </td>
+                    <td>Остановить движение</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"command",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"start_learning"</code><br><code>}</code></pre>
+                    </td>
+                    <td>Начать обучение</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"command",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"stop_learning"</code><br><code>}</code></pre>
+                    </td>
+                    <td>Остановить обучение</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"command",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"reset"</code><br><code>}</code></pre>
+                    </td>
+                    <td>Сбросить обучение</td>
+                </tr>
+                </tbody>
+            </table>
+            <h5>Запросы агенту</h5>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th class="col-4">Команда</th>
+                    <th class="col-8">Описание</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"request",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"download",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"b":{}</code><br><code>}</code></pre>
+                    </td>
+                    <td>Получить на получение данных с агента. Запрос приходит обратно с агента уже с набором данных
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"request",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"upload",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"b":{some data}</code><br><code>}</code></pre>
+                    </td>
+                    <td>Загрузить данные на агента</td>
+                </tr>
+                </tbody>
+            </table>
+            <h5>Запросы от агента</h5>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th class="col-4">Команда</th>
+                    <th class="col-8">Описание</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"request",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"download",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"b":{}</code><br><code>}</code></pre>
+                    </td>
+                    <td>Получить на получение данных с агента. Запрос приходит обратно с агента уже с набором данных
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"request",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"upload",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"b":{some data}</code><br><code>}</code></pre>
+                    </td>
+                    <td>Загрузить данные на агента</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"request",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"download",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"b":{some data}</code><br><code>}</code></pre>
+                    </td>
+                    <td>Запрос от агента на получение данных</td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"domain",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"info",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"loss",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"b":</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>"points":{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>"actor": [0,0.73, 1,0.35, 2,0.12],</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>"critic": [1,0.53, 2,0.44, 3,0.12],</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>"test": [0,0.89, 1,0.7, 2,0.56]</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>}</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>}</code><br><code>}</code></pre>
+                    </td>
+                    <td>Обучение агента. Рассмотрим на примере <code>"actor": [0,0.73, 1,0.35, 2,0.12]</code>
+                        actor - алгоритм, используемый для обучения. Числа идут парами, где первое число - шаг агента
+                        (int), а второе число ошибка (float). Таких пар чисел может быть бесконечное множество. Внутри
+                        points может быть бесконечно множество ключей, а у ключей - значений.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <pre><code>{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"r":"agent",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"t":"info",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"m":"authorization",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>"b":{</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>"name":"RaspAgent",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>"mac":"b8:27:eb:2e:10:8d",</code><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>"port":8081</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>}</code><br><code>}</code></pre>
+                    </td>
+                    <td>Авторизация агента</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pills-info" role="tabpanel" aria-labelledby="pills-info-tab">
+        <div class="container">
+            <h5>Наименование проекта</h5>
+            <p class="lead">Библиотека глубокого обучения для мобильных роботов и роботизированных систем на
+                ARM-процессорах</p>
+
+            <h5>Цель выполнения проекта</h5>
+            <p class="lead">Разработка библиотеки для глубокого иерархического обучения интеллектуальных агентов
+                (мобильных роботов и роботизированных систем) на базе ARM процессоров.</p>
+
+            <h5>Задачи по проекту</h5>
+            <ol class="list-group">
+                <li class="list-group-item">Создание ядра библиотеки для глубокого обучения. Создание основных
+                    нейросетевых структур (разные типы слоев, сетей и алгоритмов их обучения).
+                </li>
+                <li class="list-group-item">Реализация алгоритмов самообучения интеллектуальных агентов. Реализация
+                    алгоритмов глубокого обучения с подкреплением.
+                </li>
+                <li class="list-group-item">Реализация алгоритмов мультиагентного взаимодействия. Реализация алгоритмов
+                    взаимодействия агентов внутри мультиагентных систем. Реализация алгоритмов обмена сообщениями между
+                    интеллектуальными агентами при работе в группах.
+                </li>
+                <li class="list-group-item">Создание модулей визуализации и удаленного мониторинга. Создание
+                    пользовательских локальных и веб интерфейсов для управления и мониторинга процессами работы
+                    нейросетевых алгоритмов на аппаратной части.
+                </li>
+            </ol>
+
+            <h5>Область применения научно-технического продукта и т.п.</h5>
+            <ul class="list-group">
+                <li class="list-group-item">Системы беспилотных автоматических наземных аппаратов применяемых для
+                    доставки небольших грузов (интеллектуальные роботы-доставщики).
+                </li>
+                <li class="list-group-item">Роботы-конструкторы для обучающих комплексов.</li>
+                <li class="list-group-item">«Умные» автономные и работающие совместно приборы для систем умного дома
+                    (регулируемые датчики, выключатели, регулировщики) и интернета вещей.
+                </li>
+                <li class="list-group-item">Сфера развлечений: групповые игры в соревнованиях по робототехнике.</li>
+                <li class="list-group-item">Наука: создание прототипов многоагентных роботизированных систем для
+                    изучения и разработки методов коллективного взаимодействия.
+                </li>
+            </ul>
+            <h5>Проектная группа</h5>
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Дубенко Юрий Владимирович</div>
+                        <ul class="list-group-numbered">
+                            <li class="list-group-item">Анализ структур, методов и алгоритмов, которые будут реализованы
+                                в рамках работы над библиотекой.
+                            </li>
+                            <li class="list-group-item">Определение целевых алгоритмов для использования при реализации
+                                мультиагентного взаимодействия и методов самообучения интеллектуальных агентов.
+                            </li>
+                            <li class="list-group-item">Проектирование архитектуры библиотеки глубокого иерархического
+                                обучения интеллектуальных агентов.
+                            </li>
+                            <li class="list-group-item">Проектирование API библиотеки.</li>
+                            <li class="list-group-item">Разработка методов реализации модулей визуализации и удаленного
+                                мониторинга процессами работы нейросетевых алгоритмов.
+                            </li>
+                            <li class="list-group-item">Контроль исполнения всех этапов работы над проектом, научное
+                                руководство и организация работы соисполнителей.
+                            </li>
+                            <li class="list-group-item">Разработка научно-технического отчета по результатам всей работы
+                                над проектом.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Тимченко Николай Николаевич</div>
+                        <ul class="list-group-numbered">
+                            <li class="list-group-item">Анализ структур, методов и алгоритмов, которые будут реализованы
+                                в рамках работы над библиотекой.
+                            </li>
+                            <li class="list-group-item">Определение целевых алгоритмов для использования при реализации
+                                мультиагентного взаимодействия и методов самообучения интеллектуальных агентов.
+                            </li>
+                            <li class="list-group-item">Проектирование архитектуры библиотеки глубокого иерархического
+                                обучения интеллектуальных агентов.
+                            </li>
+                            <li class="list-group-item">Проектирование API библиотеки.</li>
+                            <li class="list-group-item">Разработка методов реализации модулей визуализации и удаленного
+                                мониторинга процессами работы нейросетевых алгоритмов.
+                            </li>
+                            <li class="list-group-item">Контроль исполнения всех этапов работы над проектом, научное
+                                руководство и организация работы соисполнителей.
+                            </li>
+                            <li class="list-group-item">Разработка научно-технического отчета по результатам всей работы
+                                над проектом.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Шершаков Денис Владимирович</div>
+                        <ul class="list-group-numbered">
+                            <li class="list-group-item">Проверка, что использованные при разработке библиотеки с
+                                открытым кодом зарубежных разработчиков не должны содержать вредоносных компонентов.
+                            </li>
+                            <li class="list-group-item">Создание на языках программирования высокого уровня
+                                пользовательских локальных и веб интерфейсов для управления и удаленного мониторинга
+                                процессами работы нейросетевых алгоритмов на аппаратной части.
+                            </li>
+                            <li class="list-group-item">Разработка API библиотеки.</li>
+                            <li class="list-group-item">Тестирование разработанного программного кода.</li>
+                            <li class="list-group-item">Финальное тестирование работы всей библиотеки.</li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">Рудешко Никита Андреевич</div>
+                        <ul class="list-group-numbered">
+                            <li class="list-group-item">Разработка программных интерфейсов для обмена сообщениями между
+                                пользовательской и аппаратной частями. Тестирование разработанного программного кода.
+                            </li>
+                            <li class="list-group-item">Разработка технической документации для функций библиотеки.</li>
+                            <li class="list-group-item">Проверка, что использованные при разработке библиотеки с
+                                открытым кодом зарубежных разработчиков не должны содержать вредоносных компонентов.
+                            </li>
+                            <li class="list-group-item">Создание на языках программирования высокого уровня
+                                пользовательских локальных и веб интерфейсов для управления и удаленного мониторинга
+                                процессами работы нейросетевых алгоритмов на аппаратной части.
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
 {% load static %}
 <script src="{% static 'js/info.js' %}"></script>
-{% endblock %}</title>
-</head>
-<body>
-
-</body>
+{% endblock %}
 </html>

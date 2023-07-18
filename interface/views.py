@@ -430,15 +430,14 @@ class GraphAgentDataAdd(generics.ListAPIView):
             # Получаем IP-адрес агента, откуда пришел запрос
             points = agent_data['points']
             agent_ip_address = request.META.get('REMOTE_ADDR')
-            print(agent_ip_address)
             agents = Agents.objects.filter(agent_ip_address=agent_ip_address)
             if len(agents) == 0:
                 # Агенты не найдены
-                return Response({"Ошибка": "IP-адрес не существует в базе данных"}, status=400)
+                return Response("Ошибка: IP-адрес не существует в базе данных", status=status.HTTP_200_OK)
             elif len(agents) > 1:
                 # Найдено несколько агентов
-                return Response({"Ошибка": "В базе данных существует более одного значения с таким IP-адресом"},
-                                status=400)
+                return Response("Ошибка: В базе данных существует более одного значения с таким IP-адресом",
+                                status=status.HTTP_200_OK)
             # Получаем идентификатор агента
             agent_id = agents[0].id
             print('ID агента: ', agent_id)
@@ -462,7 +461,8 @@ class GraphAgentDataAdd(generics.ListAPIView):
                             instance = serializer.save()
                             algorithm_id = instance.pk
                         else:
-                            return Response({"Ошибка": "Ошибка записи нового алгоритма в базу данных"}, status=400)
+                            return Response("Ошибка: Ошибка записи нового алгоритма в базу данных",
+                                            status=status.HTTP_200_OK)
 
                 for i in range(0, len(values), 2):
                     agent_step = values[i] if i < len(values) else None
@@ -481,8 +481,9 @@ class GraphAgentDataAdd(generics.ListAPIView):
                         if serializer.is_valid():
                             serializer.save()
                         else:
-                            return Response({"Ошибка": "Ошибка записи ошибки агента в базу данных"}, status=400)
+                            return Response({"Ошибка": "Ошибка записи ошибки агента в базу данных"},
+                                            status=status.HTTP_200_OK)
 
-            return Response({'Успех': 'Данные успешно занесены в базу данных'})
+            return Response("Успех: Данные успешно занесены в базу данных")
         else:
-            return Response(status=400)
+            return Response("Ошибка: Тип запроса должен быть POST", status=status.HTTP_200_OK)

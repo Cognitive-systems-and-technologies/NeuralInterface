@@ -1,0 +1,9 @@
+    pre {
+        white-space: pre-wrap;
+        word-break: keep-all;
+        color: #d63384
+    }
+
+    .list-group-item {
+        border: none;
+    }

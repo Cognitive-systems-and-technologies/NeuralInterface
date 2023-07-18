@@ -23,6 +23,56 @@ function agentAddData() {
         agent_status: checkboxValue // Статус агента (включен или выключен)
     };
 
+    // Функция для проверки значения на null, "None" или ""
+    function isEmpty(value) {
+        return value === null || value === "None" || (typeof value === "string" && value.trim() === "");
+    }
+
+    // Проверка наличия пустых значений в объекте agentData и вывод соответствующего сообщения.
+    const fieldsToCheck = ['agent_mac_address', 'agent_ip_address', 'agent_group_id', 'agent_type_id', 'agent_status'];
+    let isEmptyField = false; // Флаг для отслеживания, было ли обнаружено хотя бы одно пустое поле.
+
+    // Проходимся по каждому ключу из списка fieldsToCheck.
+    for (const key of fieldsToCheck) {
+        const value = agentData[key];
+        let fieldName = key; // По умолчанию используем ключ как название поля.
+
+
+        // Изменяем название поля для вывода сообщения на русском языке.
+        switch (key) {
+            case 'agent_mac_address':
+                fieldName = 'MAC адрес агента';
+                break;
+            case 'agent_ip_address':
+                fieldName = 'IP-адрес агента';
+                break;
+            case 'agent_group_id':
+                fieldName = 'группа агента';
+                break;
+            case 'agent_type_id':
+                fieldName = 'тип агента';
+                break;
+            case 'agent_status':
+                fieldName = 'статус агента';
+                break;
+        }
+
+        // Проверяем, является ли текущее поле "agent_group_id" или "agent_type_id" и содержит ли пустое или NaN значение.
+        if ((key === 'agent_group_id' || key === 'agent_type_id') && (value === null || isNaN(value))) {
+            alert(`Поле ${fieldName} не заполнено!`);
+            isEmptyField = true;
+            break; // Останавливаем цикл, если обнаружено пустое или NaN значение для "agent_group_id" или "agent_type_id".
+        } else if (isEmpty(value)) {
+            alert(`Поле "${fieldName}" не заполнено!`);
+            isEmptyField = true;
+            break; // Останавливаем цикл, если обнаружено пустое значение для другого поля.
+        }
+    }
+
+    // Если было обнаружено хотя бы одно пустое или NaN поле, прекращаем выполнение функции.
+    if (isEmptyField) {
+        return;
+    }
     // Вывод данных агента в формате JSON в консоль для отладки
     console.log(JSON.stringify(agentData));
 
@@ -90,6 +140,57 @@ function agentEditData() {
         agent_type_id: parseInt(document.getElementById('agentTypeEdit').value), // Идентификатор типа агента
         agent_status: checkboxValue // Статус агента (включен или выключен)
     };
+
+    // Функция для проверки значения на null, "None" или ""
+    function isEmpty(value) {
+        return value === null || value === "None" || (typeof value === "string" && value.trim() === "");
+    }
+
+    // Проверка наличия пустых значений в объекте agentData и вывод соответствующего сообщения.
+    const fieldsToCheck = ['agent_mac_address', 'agent_ip_address', 'agent_group_id', 'agent_type_id', 'agent_status'];
+    let isEmptyField = false; // Флаг для отслеживания, было ли обнаружено хотя бы одно пустое поле.
+
+    // Проходимся по каждому ключу из списка fieldsToCheck.
+    for (const key of fieldsToCheck) {
+        const value = agentData[key];
+        let fieldName = key; // По умолчанию используем ключ как название поля.
+
+
+        // Изменяем название поля для вывода сообщения на русском языке.
+        switch (key) {
+            case 'agent_mac_address':
+                fieldName = 'MAC адрес агента';
+                break;
+            case 'agent_ip_address':
+                fieldName = 'IP-адрес агента';
+                break;
+            case 'agent_group_id':
+                fieldName = 'группа агента';
+                break;
+            case 'agent_type_id':
+                fieldName = 'тип агента';
+                break;
+            case 'agent_status':
+                fieldName = 'статус агента';
+                break;
+        }
+
+        // Проверяем, является ли текущее поле "agent_group_id" или "agent_type_id" и содержит ли пустое или NaN значение.
+        if ((key === 'agent_group_id' || key === 'agent_type_id') && (value === null || isNaN(value))) {
+            alert(`Поле ${fieldName} не заполнено!`);
+            isEmptyField = true;
+            break; // Останавливаем цикл, если обнаружено пустое или NaN значение для "agent_group_id" или "agent_type_id".
+        } else if (isEmpty(value)) {
+            alert(`Поле "${fieldName}" не заполнено!`);
+            isEmptyField = true;
+            break; // Останавливаем цикл, если обнаружено пустое значение для другого поля.
+        }
+    }
+
+    // Если было обнаружено хотя бы одно пустое или NaN поле, прекращаем выполнение функции.
+    if (isEmptyField) {
+        return;
+    }
 
     // Вывод данных агента в формате JSON в консоль для отладки
     console.log(JSON.stringify(agentData));
