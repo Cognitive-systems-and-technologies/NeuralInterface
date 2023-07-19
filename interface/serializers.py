@@ -1,6 +1,7 @@
 # Сериализатор. Обработка данных перед отправкой пользователю
 from rest_framework import serializers
-from .models import Agents, AgentGroups, AgentTypes, AgentErrorsView, NeuralAlgorithms, AgentErrors
+from .models import Agents, AgentGroups, AgentTypes, AgentErrorsView, NeuralAlgorithms, AgentErrors, \
+    AgentNeuralNetworkState
 
 
 # Сериализаторы для агентов
@@ -34,6 +35,7 @@ class AgentErrorsSerializer(serializers.ModelSerializer):
         model = AgentErrors
         fields = '__all__'
 
+
 # Сериализаторы для групп агентов
 class GroupAddSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,3 +67,9 @@ class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = AgentErrorsView
         fields = ('id', 'agent_step', 'agent_error_value', 'agent_name', 'agent_error_info')
+
+
+class AgentNeuralNetworkStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AgentNeuralNetworkState
+        fields = '__all__'

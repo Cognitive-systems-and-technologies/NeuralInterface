@@ -21,7 +21,7 @@ from interface.views import index, monitor, info, \
      AgentAddData, AgentDeleteData, AgentEditData, \
      GroupAddData, GroupDeleteData, GroupEditData, \
      SendRequestToAgent, GraphApiData, SyncAgentData, \
-     GraphAgentDataAdd, AgentErrorsDeleteData
+     GraphAgentDataAdd, AgentErrorsDeleteData, DownloadNeuralNetworkStateData
 
 urlpatterns = [
     # Главная страница
@@ -33,7 +33,7 @@ urlpatterns = [
     # Страница администратора
     path('admin/', admin.site.urls),
     # API для добавления данных агента
-    path('api/addAgentData', AgentAddData.as_view()),
+    path('api/addAgentData', AgentAddData.as_view(), name='agent-add'),
     # API для редактирования данных агента с использованием его идентификатора (pk)
     path('api/editAgentData/<int:pk>/', AgentEditData.as_view(), name='agent-edit'),
     # API для удаления данных агента с использованием его идентификатора (pk)
@@ -55,4 +55,6 @@ urlpatterns = [
     path('api/syncAgentData', SyncAgentData.as_view(), name='agent-sync'),
     # API для добавления данных агента для графика
     path('api/graphAgentDataAdd', GraphAgentDataAdd.as_view(), name='graph-add-data'),
+    # API для добавления данных состояний агента
+    path('api/downloadNeuralNetworkStateData', DownloadNeuralNetworkStateData.as_view(), name='download-state-data'),
 ]

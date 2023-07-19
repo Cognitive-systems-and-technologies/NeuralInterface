@@ -16,7 +16,8 @@ from .models import AgentsView, AgentGroupsView, AgentTypesView, AgentErrorsView
 from .models import Agents, AgentGroups, AgentTypes, AgentErrors, AgentFiles, AgentNeuralNetworkState, NeuralAlgorithms
 # Сериализаторы
 from .serializers import GraphSerializer, AgentAddSerializer, SyncAgentDataSerializer, AgentDeleteSerializer, \
-    AgentEditSerializer, GroupAddSerializer, GroupSerializer, NeuralAlgorithmsSerializer, AgentErrorsSerializer
+    AgentEditSerializer, GroupAddSerializer, GroupSerializer, NeuralAlgorithmsSerializer, AgentErrorsSerializer, \
+    AgentNeuralNetworkState, AgentNeuralNetworkStateSerializer
 
 
 # Формирование данных для веб-страниц и рендер шаблона
@@ -357,65 +358,67 @@ class SyncAgentData(generics.ListAPIView):
 # Отправка запроса агенту
 class SendRequestToAgent(generics.ListAPIView):
     def post(self, request):
-        query_type = request.data.get('t')
-
-        if query_type == 'command':
-            # Если запрос с фронтенда, формируем запрос и отправляем данные на агента
-
-            # Извлечение CSRF-токена из заголовков запроса
-            csrf_token = request.META.get('CSRF_COOKIE', '')
-            headers = {
-                'X-CSRFToken': csrf_token  # Включение CSRF-токена в заголовки
-            }
-
-            agentId = request.data.get('agent_id')
-            agentCommand = request.data.get('agent_command')
-            agentData = Agents.objects.get(id=agentId)
-            agentIpAddress = agentData.agent_ip_address
-            agentPort = agentData.agent_port
-
-            if agentIpAddress is None or agentPort is None or agentIpAddress == '' or agentPort == '':
-                return Response("Проверьте данные IP-адреса и порта агента", status=400)
-            elif agentCommand == 'download':
-                t_value = 'request'
-                # Обычный запрос на получение данных с агента и сохранение ответа в БД
-            elif agentCommand == 'upload':
-                t_value = 'request'
-                # Вытянуть данные из таблицы и отправить на агента
-            else:
-                t_value = 'command'
-                pass
-
-            url = 'http://' + agentIpAddress + ':' + agentPort
+        csrf_token = request.META.get('CSRF_COOKIE', '')
+        headers = {
+            'X-CSRFToken': csrf_token  # Include the CSRF token in the headers
+        }
+        agent_id = request.data.get('agent_id')
+        agent_command = request.data.get('agent_command')
+        agent_data = Agents.objects.get(id=agent_id)
+        agent_ip_address = agent_data.agent_ip_address
+        agent_port = agent_data.agent_port
+        print(agent_id)
+        if agent_ip_address is None or agent_port is None or agent_ip_address == '' or agent_port == '':
+            return Response("Проверьте данные IP адреса и порта агента", status=status.HTTP_200_OK)
+        # Вытащить данные из таблицы и отправить на агента
+        if agent_command == 'upload':
+            # serializer = AgentNeuralNetworkStateSerializer(data=agent_id)
+            # if serializer.is_valid():
+            try:
+                neural_network_state = AgentNeuralNetworkState.objects.get(agent_id=agent_id)
+                b_value = neural_network_state.neural_network_state
+                print(b_value)
+            except AgentNeuralNetworkState.DoesNotExist:
+                return Response("Для текущего агента нет данных в таблице состояний нейросети",
+                                status=status.HTTP_200_OK)
+            # else:
+            #    return Response("Ошибка поиска агента в таблице состояний нейросети", status=status.HTTP_200_OK)
+        elif agent_command == 'download':
+            b_value = ''
+            pass
+        # Обычный запрос на получения данных с агента и сохранение ответа в БД
+        if agent_command != 'download' and agent_command != 'upload':
             data = {
                 'r': 'domain',
-                't': t_value,
-                'm': agentCommand,
-                'b': ''
+                't': 'command',
+                'm': agent_command
             }
-
-            # Отправка HTTP-запроса с извлеченными данными
-            try:
-                response = requests.post(url, headers=headers, json=data)
-                response.raise_for_status()
-                # Обработка ответа здесь
-                result = response.json()
-                # Возврат успешного ответа
-                return Response(result, status=status.HTTP_200_OK)
-            except ConnectionError as e:
-                # Обработка ошибки соединения
-                message = 'Ошибка: Ошибка соединения - ' + str(e)
-                return Response(message, status=status.HTTP_200_OK)
-            except requests.exceptions.RequestException as e:
-                # Обработка других исключений запроса
-                message = 'Ошибка: ' + str(e)
-                return Response(message, status=status.HTTP_200_OK)
-
-        elif query_type == 'request':
-            # Если запрос с агента, обрабатываем данные
-            return Response('test', status=status.HTTP_200_OK)
         else:
-            return Response('global error', status=status.HTTP_200_OK)
+            data = {
+                'r': 'domain',
+                't': 'request',
+                'm': agent_command,
+                'b': b_value
+            }
+        print('JSON: ', data)
+        url = 'http://' + agent_ip_address + ':' + agent_port
+        print('URL: ', url)
+        # Send an HTTP request using the extracted data
+        try:
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()
+            # Process the response here
+            result = response.json()
+            # Return the success response
+            return Response(result, status=status.HTTP_200_OK)
+        except ConnectionError as e:
+            # Handle the connection error
+            message = 'Ошибка: Ошибка соединения - ' + str(e)
+            return Response(message, status=status.HTTP_200_OK)
+        except requests.exceptions.RequestException as e:
+            # Handle other request exceptions
+            message = 'Ошибка: ' + str(e)
+            return Response(message, status=status.HTTP_200_OK)
 
 
 # Добавление данных в таблицу агента
@@ -487,3 +490,46 @@ class GraphAgentDataAdd(generics.ListAPIView):
             return Response("Успех: Данные успешно занесены в базу данных")
         else:
             return Response("Ошибка: Тип запроса должен быть POST", status=status.HTTP_200_OK)
+
+
+class DownloadNeuralNetworkStateData(APIView):
+    def post(self, request):
+        request_data = request.data
+        # request_data = '{"r": "domain", "t": "request", "m": "download", "b": "Тут не лежат данные"}'
+        # data_conversion = json.loads(request_data)
+        if request_data['m'] == 'download':
+            neural_network_state_data = request_data['b']
+            agent_ip_address = request.META.get('REMOTE_ADDR')
+            print(agent_ip_address)
+            agents = Agents.objects.filter(agent_ip_address=agent_ip_address)
+            if len(agents) == 0:
+                return Response({"Ошибка": "IP адреса не существует в базе данных"}, status=400)
+            elif len(agents) > 1:
+                return Response({"Ошибка": "В базе данных существует больше одного значения с таким IP адресом"},
+                                status=400)
+            agent_id = agents[0].id
+            print('ID агента: ', agent_id)
+            save_data = {
+                'agent_id': agent_id,
+                'neural_network_state': neural_network_state_data,
+                'datetime_create': datetime.now(),
+                'datetime_change': datetime.now()
+            }
+            print(save_data)
+            serializer = AgentNeuralNetworkStateSerializer(data=save_data)
+            if serializer.is_valid():
+                try:
+                    agent = AgentNeuralNetworkState.objects.get(agent_id=agent_id)
+                    agent.neural_network_state = neural_network_state_data
+                    agent.datetime_change = datetime.now()
+                    agent.save()
+                except AgentNeuralNetworkState.DoesNotExist:
+                    AgentNeuralNetworkState.objects.create(
+                        agent_id=agent_id,
+                        neural_network_state=neural_network_state_data,
+                        datetime_create=datetime.now()
+                    )
+
+            return Response({'Успех': 'Данные успешно занесены в базу данных'})
+        else:
+            return Response(status=400)
