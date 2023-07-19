@@ -73,7 +73,6 @@ class AgentNeuralNetworkState(models.Model):
     datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
     datetime_change = models.DateTimeField(blank=True, null=True)  # Дата и время создания
 
-
     class Meta:
         managed = False
         db_table = 't_agent_neural_network_state'
