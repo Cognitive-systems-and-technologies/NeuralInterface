@@ -23,7 +23,7 @@
 
 1. Создайте папку для проекта.
    
-   Например: cd C:\Projects\NeuralAlgorithmsInterface
+   Например: C:\Projects\NeuralAlgorithmsInterface
 
 2. Откройте командную строку и пропишите путь к папке, которую только что создали, используя команду: 
    
