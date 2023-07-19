@@ -70,7 +70,9 @@ class AgentNeuralNetworkState(models.Model):
     agent = models.ForeignKey(Agents, models.DO_NOTHING, blank=True, null=True)  # Агент, связанный с состоянием нейросети
     neural_network_state = models.CharField(max_length=1000000, blank=True, null=True)  # Состояние нейросети агента
     neural_network_state_description = models.CharField(max_length=250, blank=True, null=True)  # Описание состояния нейросети
-    create_datetime = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    datetime_create = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+    datetime_change = models.DateTimeField(blank=True, null=True)  # Дата и время создания
+
 
     class Meta:
         managed = False
