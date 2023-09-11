@@ -42,7 +42,7 @@
 
 5. Загрузите данные из репозитория с помощью команды:
 
-   git clone https://github.com/Cognitive-systems-and-technologies/pythonProject
+   git clone https://github.com/Cognitive-systems-and-technologies/NeuralInterface
 
    Также, Вы можете сделать данное действие, без использования Git. Для этого нажмите на кнопку "Code", а затем в
    выпадающем меню нажмите Download ZIP. После этого распакуйте содержимое архива в папку C:
