@@ -22,11 +22,13 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
    Также, установите python для всех пользователей Windows.
 2. Установите Git.
 
-https://github.com/Cognitive-systems-and-technologies/NeuralInterface/blob/main/interface/static/video/InstallGit.mp4
+[InstallGit.webm](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/ad6a90bb-c839-49bb-bdea-759cc8af7d19)
 
    Ссылка: https://git-scm.com/downloads
 
 ## Установка
+
+[InstallProject.webm](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/6156a779-c906-4417-a0f6-222cc7251737)
 
 1. Создайте папку для проекта.
 
