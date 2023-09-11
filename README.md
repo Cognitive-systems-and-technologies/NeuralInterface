@@ -14,6 +14,8 @@
 
 1. Установите python с версией не менее 3.9.
 
+https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/cef11f5a-3f76-4a7d-9b8d-bb3c2c39ad46
+
    Ссылка: https://www.python.org/downloads/
 
    Обязательно, установите в галочку в пункте "Add python.exe to path"
