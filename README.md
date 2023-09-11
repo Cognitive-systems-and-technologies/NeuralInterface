@@ -10,6 +10,16 @@
 интеллектуальные роботизированные системы на базе ARM процессоров, обучать их на выполнение пользовательских задач и
 производить удаленное управление и мониторинг за счет локальных и веб интерфейсов.
 
+## Почему Django?
+Использование веб-серверной вместо десктопного приложения позволяет развернуть данный проект не только на операционной 
+системе Windows, но и на Linux, а также на любом сервере, позволяя объединять множество устройств даже вне 
+локальной сети.
+
+## Требования для запуска
+1. Python версии не ниже 3.9
+2. Git
+3. Google Chrome или другой аналогичный браузер
+
 ## Подготовка к установке
 
 1. Установите python с версией не менее 3.9.
@@ -22,13 +32,11 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
    Также, установите python для всех пользователей Windows.
 2. Установите Git.
 
-[InstallGit.webm](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/ad6a90bb-c839-49bb-bdea-759cc8af7d19)
+https://github.com/Cognitive-systems-and-technologies/NeuralInterface/blob/main/interface/static/video/InstallGit.mp4
 
    Ссылка: https://git-scm.com/downloads
 
 ## Установка
-
-[InstallProject.webm](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/6156a779-c906-4417-a0f6-222cc7251737)
 
 1. Создайте папку для проекта.
 
@@ -109,7 +117,11 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
 
 ## Использование
 
-В самом сайте на странице "Информация о проекте" есть подробная инструкция по использованию
+В самом сайте на странице "Информация о проекте" есть подробная инструкция по использованию.
+
+Логин и пароль от панели администратора: 
+
+Логин: root | Пароль: 1234
 
 ## Лицензия
 
