@@ -22,6 +22,8 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
    Также, установите python для всех пользователей Windows.
 2. Установите Git.
 
+https://github.com/Cognitive-systems-and-technologies/NeuralInterface/blob/main/interface/static/video/InstallGit.mp4
+
    Ссылка: https://git-scm.com/downloads
 
 ## Установка
