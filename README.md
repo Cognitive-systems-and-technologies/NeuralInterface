@@ -58,39 +58,57 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
 
    Например: C:\Projects\NeuralInterface
 
-2. Откройте командную строку и пропишите путь к папке, которую только что создали, используя команду:
+   ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/2b48d108-8de3-482a-926c-7ac8ccfc7cdf)
+
+3. Откройте командную строку и пропишите путь к папке, которую только что создали, используя команду:
 
    cd C:\Projects\NeuralInterface
 
-3. Создайте виртуальное окружение с помощью команды:
+   ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/197cedf3-e042-4052-bf68-e27cf248f2d1)
+
+5. Создайте виртуальное окружение с помощью команды:
 
    python -m venv venv
 
-4. Активируйте виртуальное окружение с помощью команды:
+   ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/ddff6223-df93-4a33-90a6-87218f15f92c)
+
+7. Активируйте виртуальное окружение с помощью команды:
 
    .\venv\Scripts\activate
 
-5. Загрузите данные из репозитория с помощью команды:
+   ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/09bbe463-7819-4577-8602-8f309a1a1afd)
+
+9. Загрузите данные из репозитория с помощью команды:
 
    git clone https://github.com/Cognitive-systems-and-technologies/NeuralInterface
+
+   ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/6028bae2-04c4-4f61-8c0c-9fb28f05a875)
 
    Также, Вы можете сделать данное действие, без использования Git. Для этого нажмите на кнопку "Code", а затем в
    выпадающем меню нажмите Download ZIP. После этого распакуйте содержимое архива в папку C:
    \Projects\NeuralAlgorithmsInterface
 
-6. Перейдите в папку проекта с помощью команды:
+9. Перейдите в папку проекта с помощью команды:
 
    cd C:\Projects\NeuralInterface\NeuralInterface
 
-7. Установите зависимости с помощью команды:
+   ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/2b6042bf-54e7-4141-a61f-b2d67782e733)
+
+11. Установите зависимости с помощью команды:
 
    pip install -r requirements.txt
 
-8. Запустите проект с помощью команды:
+   ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/8a814552-d7b3-4294-b1f7-989c1c80d51b)
+
+11. Запустите проект с помощью команды:
 
    python manage.py runserver
 
-9. Откройте браузер на странице http://127.0.0.1:8000/
+   ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/bbdc81f5-ba40-4231-a097-73c5e354e2de)
+
+11. Откройте браузер на странице http://127.0.0.1:8000/
+
+    ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/f17937c3-adf7-4b92-bfdf-ccf03633cc29)
 
 ## Запуск
 
