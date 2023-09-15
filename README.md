@@ -42,6 +42,8 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
 
 ## Установка
 
+[InstallProject.webm](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/6f259c2d-492f-4dbb-8bc3-079bdbe7bcd9)
+
 1. Создайте папку для проекта.
 
    Например: C:\Projects\NeuralInterface
