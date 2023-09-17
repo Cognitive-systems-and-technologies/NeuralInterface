@@ -190,7 +190,7 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
 
 ## Тестирование библиотеки в демо-режиме без роботов.
 
-Для проверки работоспособности библиотеки, необходимо помимо запуска самого модуля NeuralInterface также запустить файл requests.exe в папке C:\Projects\NeuralInterface\NeuralInterface\testing. Эта программа иммитирует API робота и позволяет обмениваться с ним запросами. 
+Для проверки работоспособности библиотеки, необходимо помимо запуска самого модуля NeuralInterface также запустить файл requests.exe в папке C:\Projects\NeuralInterface\NeuralInterface\testing. Эта программа иммитирует API робота и добавляет данные в базу данных модуля NeuralInterface. 
 
 ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/e1026e9a-83a3-46a4-8bd3-642ff749dc6d)
 
