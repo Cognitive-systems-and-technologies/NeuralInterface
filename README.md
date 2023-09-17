@@ -1,4 +1,4 @@
-# Интерфейс для обучения агентов
+![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/03e54ad6-ba6b-416b-9242-7f66b8b4d9ab)# Интерфейс для обучения агентов
 
 # Общее описание
 NeuralInterface - это модуль мониторинга и визуализации, используемый для отображения работы агентов (мобильных роботов). 
@@ -187,6 +187,20 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
 Логин и пароль от панели администратора: 
 
 Логин: root | Пароль: 1234
+
+## Тестирование библиотеки в демо-режиме без роботов.
+
+Для проверки работоспособности библиотеки, необходимо помимо запуска самого модуля NeuralInterface также запустить файл requests.exe в папке C:\Projects\NeuralInterface\NeuralInterface\testing. Эта программа иммитирует API робота и позволяет обмениваться с ним запросами. 
+
+![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/e1026e9a-83a3-46a4-8bd3-642ff749dc6d)
+
+После запуска программы происходит иммитация записи данных обучения агента в базу данных модуля NeuralInterface. Дождитесь окончания процесса записи данных. 
+
+![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/325de00b-761b-42b0-9628-dc651e21af77)
+
+После этого, можно проверить работоспособность страницы "Мониторинг". После каждого нажатия на кнопку в правой части страницы, будет отправляться запрос на агента. Информацию об этом можно увидеть в консоли.
+
+https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/17d5d939-c464-4f51-8621-1e01875254e5
 
 # Описание каждой страницы
 ## Панель управления
