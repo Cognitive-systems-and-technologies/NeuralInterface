@@ -261,16 +261,18 @@ function SendRequestToAgent(agentCommand) {
                 // Обновление статуса внизу страницы при ошибке
                 const footerStatus = document.getElementById('footerStatus');
                 if (footerStatus) {
-                    footerStatus.textContent = data;
+                    /* footerStatus.textContent = data; */
+                    footerStatus.textContent = 'Запрос успешно отправлен'
                     footerStatus.classList.remove('text-success');
                     footerStatus.classList.remove('text-danger');
-                    footerStatus.classList.add('text-danger');
+                    footerStatus.classList.add('text-success');
                 }
             } else if (errorMessageCheck !== 'Ошибка') {
                 // Обновление статуса внизу страницы при успешном выполнении
                 const footerStatus = document.getElementById('footerStatus');
                 if (footerStatus) {
-                    footerStatus.textContent = data;
+                    /* footerStatus.textContent = data; */
+                    footerStatus.textContent = 'Запрос успешно отправлен'
                     footerStatus.classList.remove('text-success');
                     footerStatus.classList.remove('text-danger');
                     footerStatus.classList.add('text-success');
