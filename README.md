@@ -32,7 +32,7 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
 Частота работы процессора STM32F429ZI - 180MHz, размер программируемой памяти 2MB, объем оперативной памяти 256KB. 
 Характеристики для raspberry pi: процессор: 64-битный четырёхъядерный ARM Cortex-A53 с тактовой частотой 1,2 ГГц на однокристальном чипе Broadcom BCM2837, оперативная память 1ГБ LPDDR2 SDRAM.
 
-Характеристики Yahboom Raspbot AI Vision Robot Car with FPV camera.
+Характеристики Yahboom Raspbot AI Vision Robot Car with FPV camera:
 
 - Управляющий контроллер:	Raspberry Pi (не входит в комплект).
 - Язык программирование: Python.
@@ -52,12 +52,9 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
 
 ## Требования для запуска модуля NeuralInterface на ПК 
 1. Операционная система на выбор:
-
-   Windows 7/8/10 64-разрядная
-
-   Linux (рекомендуется Ubuntu 18.04 LTS или более новая версия)
-
-   macOS Big Sur (версия 11) или более новая
+   - Windows 7/8/10 64-разрядная
+   - Linux (рекомендуется Ubuntu 18.04 LTS или более новая версия)
+   - macOS Big Sur (версия 11) или более новая
 3. Процессор: Intel Core i3 или эквивалентный AMD
 4. Оперативная память (RAM): 2 ГБ (рекомендуется 4 ГБ и более для более сложных проектов)
 5. Жесткий диск: 10 ГБ (минимально для Django и его зависимостей)
