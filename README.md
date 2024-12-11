@@ -139,7 +139,12 @@ python manage.py runserver
 
 ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/f17937c3-adf7-4b92-bfdf-ccf03633cc29)
 
-## Launch
+
+## Fast Launch
+
+Run file C:\Projects\NeuralInterface\NeuralInterface\testing\FastStart\run_server.bat
+
+## Manual Launch
 
 1. Open a command prompt and specify the path to the folder where the project is located using the command:
 
@@ -390,7 +395,11 @@ https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/477
 
     ![image](https://github.com/Cognitive-systems-and-technologies/NeuralInterface/assets/47759876/f17937c3-adf7-4b92-bfdf-ccf03633cc29)
 
-## Запуск
+## Быстрый запуск
+
+Запустите файл C:\Projects\NeuralInterface\NeuralInterface\testing\FastStart\run_server.bat
+
+## Ручной запуск
 
 1. Откройте командную строку и пропишите путь к папке, в которой находится проект, используя команду:
 
