@@ -370,10 +370,8 @@ class SendRequestToAgent(generics.ListAPIView):
         print(agent_id)
         if agent_ip_address is None or agent_port is None or agent_ip_address == '' or agent_port == '':
             return Response("Проверьте данные IP адреса и порта агента", status=status.HTTP_200_OK)
-        # Вытащить данные из таблицы и отправить на агента
+        # Получить данные из таблицы и отправить на агента
         if agent_command == 'upload':
-            # serializer = AgentNeuralNetworkStateSerializer(data=agent_id)
-            # if serializer.is_valid():
             try:
                 neural_network_state = AgentNeuralNetworkState.objects.get(agent_id=agent_id)
                 b_value = neural_network_state.neural_network_state
@@ -381,11 +379,10 @@ class SendRequestToAgent(generics.ListAPIView):
             except AgentNeuralNetworkState.DoesNotExist:
                 return Response("Для текущего агента нет данных в таблице состояний нейросети",
                                 status=status.HTTP_200_OK)
-            # else:
-            #    return Response("Ошибка поиска агента в таблице состояний нейросети", status=status.HTTP_200_OK)
         elif agent_command == 'download':
             b_value = ''
             pass
+
         # Обычный запрос на получения данных с агента и сохранение ответа в БД
         if agent_command != 'download' and agent_command != 'upload':
             data = {
@@ -403,20 +400,20 @@ class SendRequestToAgent(generics.ListAPIView):
         print('JSON: ', data)
         url = 'http://' + agent_ip_address + ':' + agent_port
         print('URL: ', url)
-        # Send an HTTP request using the extracted data
+        # Отправить HTTP запрос, используя полученные данные
         try:
             response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
-            # Process the response here
+            # Сохранить данные, полученные от запроса
             result = response.json()
-            # Return the success response
+            # Вернуть сообщение об успехе
             return Response(result, status=status.HTTP_200_OK)
         except ConnectionError as e:
-            # Handle the connection error
+            # Вернуть сообщение об ошибке при отсутствии соединения
             message = 'Ошибка: Ошибка соединения - ' + str(e)
             return Response(message, status=status.HTTP_200_OK)
         except requests.exceptions.RequestException as e:
-            # Handle other request exceptions
+            # Вернуть сообщение об ошибке при других исключениях
             message = 'Ошибка: ' + str(e)
             return Response(message, status=status.HTTP_200_OK)
 
@@ -495,6 +492,7 @@ class GraphAgentDataAdd(generics.ListAPIView):
 class DownloadNeuralNetworkStateData(APIView):
     def post(self, request):
         request_data = request.data
+        # Данные для тестирования
         # request_data = '{"r": "domain", "t": "request", "m": "download", "b": "Тут не лежат данные"}'
         # data_conversion = json.loads(request_data)
         if request_data['m'] == 'download':
